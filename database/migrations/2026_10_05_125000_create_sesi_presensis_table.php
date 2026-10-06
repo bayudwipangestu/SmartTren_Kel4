@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Menjalankan migration.
+     */
+    public function up(): void
+    {
+        Schema::create('sesi_presensi', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('kegiatan_id')
+                ->constrained('kegiatan')
+                ->cascadeOnDelete();
+
+            $table->date('tanggal');
+
+            $table->time('jam_mulai');
+
+            $table->time('jam_selesai');
+
+            $table->enum('status', [
+                'aktif',
+                'selesai',
+                'dibatalkan',
+            ])->default('aktif');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Membatalkan migration.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('sesi_presensi');
+    }
+};
