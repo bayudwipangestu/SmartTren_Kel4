@@ -7,6 +7,7 @@ use App\Http\Controllers\MahasantriController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SesiPresensiController;
+use App\Http\Controllers\SuratIzinController; // <-- [BARU] Menambahkan controller Surat Izin
 use App\Http\Controllers\Mahasantri\PresensiController as MahasantriPresensiController;
 use Illuminate\Support\Facades\Route;
 
@@ -395,6 +396,18 @@ Route::middleware(['auth', 'role:mahasantri'])
             MahasantriPresensiController::class,
             'riwayat'
         ])->name('mahasantri.presensi.riwayat');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | [BARU] PENGAJUAN SURAT IZIN MAHASANTRI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/izin', [
+            SuratIzinController::class,
+            'store'
+        ])->name('izin.store');
 
     });
 
