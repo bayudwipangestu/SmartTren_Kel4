@@ -1,625 +1,592 @@
 <x-app-layout>
+    <div class="mhs-dashboard">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        .mhs-dashboard {
-            min-height: calc(100vh - 65px);
-            background: #f6f8f7;
-            padding: 32px 0 60px;
-        }
-
-        .mhs-container {
-            width: 100%;
-            max-width: 1250px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* =========================
-           WELCOME
-        ========================= */
-
-        .welcome-card {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(
-                135deg,
-                #087443,
-                #10a05a
-            );
-            color: white;
-            border-radius: 22px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 12px 30px rgba(8, 116, 67, .16);
-        }
-
-        .welcome-card::before {
-            content: "";
-            position: absolute;
-            width: 230px;
-            height: 230px;
-            right: -80px;
-            top: -120px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .08);
-        }
-
-        .welcome-card::after {
-            content: "";
-            position: absolute;
-            width: 130px;
-            height: 130px;
-            right: 100px;
-            bottom: -85px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .06);
-        }
-
-        .welcome-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .welcome-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 12px;
-            background: rgba(255,255,255,.13);
-            border: 1px solid rgba(255,255,255,.15);
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
-
-        .welcome-title {
-            margin: 0;
-            font-size: 30px;
-            font-weight: 800;
-            letter-spacing: -.5px;
-        }
-
-        .welcome-description {
-            margin: 8px 0 0;
-            font-size: 14px;
-            opacity: .92;
-            max-width: 650px;
-        }
-
-        /* =========================
-           QUICK INFO
-        ========================= */
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .info-card {
-            background: white;
-            border: 1px solid #e1e8e4;
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(31,55,43,.04);
-        }
-
-        .info-icon {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: #eaf8f0;
-            font-size: 21px;
-            margin-bottom: 14px;
-        }
-
-        .info-title {
-            margin: 0;
-            color: #1c2a23;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .info-text {
-            margin: 5px 0 0;
-            color: #7a8780;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           MAIN MENU
-        ========================= */
-
-        .section-card {
-            background: white;
-            border: 1px solid #e1e8e4;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 7px 24px rgba(31,55,43,.05);
-        }
-
-        .section-heading {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .section-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: #eaf8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-        }
-
-        .section-heading h2 {
-            margin: 0;
-            color: #17231e;
-            font-size: 19px;
-            font-weight: 800;
-        }
-
-        .section-heading p {
-            margin: 3px 0 0;
-            color: #7b8781;
-            font-size: 12px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .menu-card {
-            border: 1px solid #e1e8e4;
-            border-radius: 16px;
-            padding: 20px;
-            background: #fbfdfc;
-            transition: .2s ease;
-        }
-
-        .menu-card:hover {
-            transform: translateY(-3px);
-            border-color: #b9dfca;
-            box-shadow: 0 8px 20px rgba(8,116,67,.08);
-        }
-
-        .menu-icon {
-            width: 46px;
-            height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 13px;
-            background: #eaf8f0;
-            font-size: 22px;
-            margin-bottom: 14px;
-        }
-
-        .menu-card h3 {
-            margin: 0;
-            color: #1e2d26;
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .menu-card p {
-            margin: 6px 0 0;
-            color: #7a8780;
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .menu-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 14px;
-            padding: 5px 9px;
-            border-radius: 999px;
-            background: #f1f4f2;
-            color: #6c7972;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .menu-status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #9aa59f;
-        }
-
-        /* =========================
-           ACCOUNT INFO
-        ========================= */
-
-        .account-card {
-            margin-top: 20px;
-            background: white;
-            border: 1px solid #e1e8e4;
-            border-radius: 20px;
-            padding: 22px;
-            box-shadow: 0 7px 24px rgba(31,55,43,.05);
-        }
-
-        .account-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .avatar {
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            background: #087443;
-            color: white;
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .account-name {
-            margin: 0;
-            color: #1e2d26;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .account-email {
-            margin: 4px 0 0;
-            color: #7a8780;
-            font-size: 13px;
-        }
-
-        .role-badge {
-            margin-left: auto;
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: #eaf8f0;
-            color: #087443;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 900px) {
-            .info-grid,
-            .menu-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 650px) {
-            .mhs-container {
-                padding: 0 15px;
+        <style>
+            .mhs-dashboard,
+            .mhs-dashboard * {
+                box-sizing: border-box;
             }
 
             .mhs-dashboard {
-                padding-top: 20px;
+                padding: 26px 30px 36px;
+                color: #17372b;
+                font-family: Figtree, sans-serif;
             }
 
-            .welcome-card {
-                padding: 24px;
-                border-radius: 18px;
+            .mhs-dashboard a {
+                text-decoration: none;
+            }
+.mhs-hero {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 30px;
+                min-height: 220px;
+                overflow: hidden;
+                padding: 34px;
+                border-radius: 15px;
+                color: #fff;
+                background: linear-gradient(115deg, #104d3c 0%, #087b55 68%, #07845b 100%);
+                box-shadow: 0 12px 28px #0b68421c;
             }
 
-            .welcome-title {
-                font-size: 24px;
+            .mhs-hero::before {
+                position: absolute;
+                top: -180px;
+                right: 180px;
+                width: 420px;
+                height: 420px;
+                border: 35px solid #ffffff08;
+                border-radius: 50%;
+                content: "";
+                pointer-events: none;
             }
 
-            .info-grid,
-            .menu-grid {
-                grid-template-columns: 1fr;
+            .mhs-hero-copy {
+                position: relative;
+                z-index: 1;
+                max-width: 720px;
             }
 
-            .section-card,
-            .account-card {
-                padding: 18px;
+            .mhs-eyebrow {
+                margin-bottom: 18px;
+                color: #a6f4cf;
+                font-size: 10px;
+                font-weight: 800;
+                letter-spacing: 2px;
             }
 
-            .account-row {
+            .mhs-hero h2 {
+                margin: 0;
+                color: white;
+                font-size: clamp(23px, 2.3vw, 34px);
+                font-weight: 800;
+                line-height: 1.25;
+                letter-spacing: -.7px;
+            }
+
+            .mhs-hero p {
+                max-width: 650px;
+                margin: 13px 0 20px;
+                color: #e2f6eb;
+                font-size: 12px;
+                line-height: 1.9;
+            }
+
+            .mhs-hero-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 9px;
+            }
+
+            .mhs-btn-light,
+            .mhs-btn-outline {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                min-height: 38px;
+                padding: 0 15px;
+                border-radius: 8px;
+                font-size: 11px;
+                font-weight: 800;
+                transition: .2s;
+            }
+
+            .mhs-btn-light {
+                color: #12533d;
+                background: white;
+            }
+
+            .mhs-btn-light:hover {
+                background: #eaf8f0;
+            }
+
+            .mhs-btn-outline {
+                color: white;
+                border: 1px solid #ffffff42;
+                background: #ffffff09;
+            }
+
+            .mhs-btn-outline:hover {
+                background: #ffffff19;
+            }
+
+            .mhs-hero-brand {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                flex: 0 0 180px;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 150px;
+                border-bottom: 1px solid #ffffff25;
+                color: white;
+                text-align: center;
+            }
+
+            .mhs-emblem {
+                display: grid;
+                place-items: center;
+                width: 85px;
+                height: 85px;
+                margin-bottom: 13px;
+                transform: rotate(45deg);
+                border: 1px solid #ffffff55;
+                border-radius: 25px;
+                background: #ffffff0a;
+                font-size: 35px;
+            }
+
+            .mhs-emblem span {
+                transform: rotate(-45deg);
+            }
+
+            .mhs-hero-brand strong {
+                font-size: 11px;
+                letter-spacing: 2px;
+            }
+
+            .mhs-hero-brand small {
+                margin-top: 6px;
+                color: #c2ead6;
+                font-size: 9px;
+            }
+
+            .mhs-stats {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 13px;
+                margin-top: 23px;
+            }
+
+            .mhs-stat {
+                position: relative;
+                overflow: hidden;
+                min-width: 0;
+                padding: 19px;
+                border: 1px solid #e6ece8;
+                border-bottom: 3px solid var(--accent);
+                border-radius: 12px;
+                background: white;
+                box-shadow: 0 3px 10px #17372b05;
+            }
+
+            .mhs-stat-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+            }
+
+            .mhs-stat-label {
+                color: #6d8175;
+                font-size: 11px;
+            }
+
+            .mhs-stat-icon {
+                display: grid;
+                place-items: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 9px;
+                background: var(--soft);
+                color: var(--accent);
+                font-size: 14px;
+                font-weight: 800;
+            }
+
+            .mhs-stat-number {
+                margin-top: 16px;
+                font-size: 29px;
+                font-weight: 800;
+                line-height: 1;
+            }
+
+            .mhs-stat-note {
+                margin-top: 13px;
+                color: #98a49c;
+                font-size: 10px;
+            }
+
+            .mhs-bottom-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin-top: 23px;
+            }
+
+            .mhs-panel {
+                min-width: 0;
+                padding: 22px;
+                border: 1px solid #e6ece8;
+                border-radius: 13px;
+                background: white;
+            }
+
+            .mhs-panel-heading {
+                display: flex;
                 align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 19px;
             }
 
-            .role-badge {
-                margin-left: 0;
+            .mhs-panel-heading h3 {
+                margin: 0;
+                font-size: 15px;
+                font-weight: 800;
+            }
+
+            .mhs-panel-heading p {
+                margin: 6px 0 0;
+                color: #8a9990;
+                font-size: 11px;
+            }
+
+            .mhs-tag {
+                padding: 7px 9px;
+                border-radius: 6px;
+                color: #6f8577;
+                background: #f1f6f3;
+                font-size: 8px;
+                font-weight: 800;
+                letter-spacing: .5px;
+                white-space: nowrap;
+            }
+
+            .mhs-total {
+                display: flex;
+                align-items: baseline;
+                gap: 9px;
+                margin: 22px 0 16px;
+            }
+
+            .mhs-total strong {
+                font-size: 30px;
+                font-weight: 800;
+            }
+
+            .mhs-total span {
+                color: #91a096;
+                font-size: 10px;
+            }
+
+            .mhs-bar {
+                display: flex;
+                overflow: hidden;
+                height: 9px;
+                gap: 3px;
+                border-radius: 10px;
+                background: #edf2ee;
+            }
+
+            .mhs-bar span {
+                min-width: 0;
+                border-radius: 10px;
+            }
+
+            .mhs-legend {
+                display: grid;
+                gap: 15px;
+                margin-top: 22px;
+            }
+
+            .mhs-legend-row {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                color: #74867b;
+                font-size: 11px;
+            }
+
+            .mhs-legend-dot {
+                flex: 0 0 8px;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--dot);
+            }
+
+            .mhs-legend-row strong {
+                margin-left: auto;
+                color: #274536;
+            }
+
+            .mhs-quick-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 13px 0;
+                border-top: 1px solid #edf1ee;
+                color: #234434;
+            }
+
+            .mhs-quick-number {
+                display: grid;
+                flex: 0 0 37px;
+                place-items: center;
+                width: 37px;
+                height: 37px;
+                border: 1px solid #e4ece6;
+                border-radius: 9px;
+                background: #f8fbf9;
+                color: #078451;
+                font-size: 10px;
+                font-weight: 800;
+            }
+
+            .mhs-quick-copy {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .mhs-quick-copy strong {
+                display: block;
+                font-size: 11px;
+                font-weight: 800;
+            }
+
+            .mhs-quick-copy small {
+                display: block;
                 margin-top: 5px;
+                color: #8b9991;
+                font-size: 10px;
+                line-height: 1.5;
             }
-        }
-    </style>
 
+            .mhs-quick-arrow {
+                color: #6b8a77;
+                font-size: 17px;
+            }
 
-    <div class="mhs-dashboard">
+            @media (max-width: 1100px) {
+                .mhs-dashboard {
+                    padding: 22px;
+                }
 
-        <div class="mhs-container">
+                .mhs-hero {
+                    padding: 27px;
+                }
 
-            {{-- =========================
-                 WELCOME
-            ========================= --}}
+                .mhs-hero-brand {
+                    flex-basis: 125px;
+                }
 
-            <div class="welcome-card">
+                .mhs-stats {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
 
-                <div class="welcome-content">
+            @media (max-width: 760px) {
+                .mhs-dashboard {
+                    padding: 18px 14px 26px;
+                }
+.mhs-hero-brand { display: none; }
 
-                    <div class="welcome-label">
-                        🎓
-                        Dashboard Mahasantri
-                    </div>
+                .mhs-hero {
+                    min-height: auto;
+                    padding: 25px 20px;
+                }
 
-                    <h1 class="welcome-title">
-                        Assalamu'alaikum,
-                        {{ auth()->user()->name }} 👋
-                    </h1>
+                .mhs-hero h2 {
+                    font-size: 25px;
+                }
 
-                    <p class="welcome-description">
-                        Selamat datang di Sistem Presensi SmartTren.
-                        Gunakan dashboard ini untuk mengakses informasi
-                        dan aktivitas presensi kamu.
-                    </p>
+                .mhs-hero p {
+                    font-size: 11px;
+                }
 
+                .mhs-stats {
+                    gap: 10px;
+                }
+
+                .mhs-stat {
+                    padding: 14px;
+                }
+
+                .mhs-stat-number {
+                    font-size: 25px;
+                }
+
+                .mhs-bottom-grid {
+                    grid-template-columns: 1fr;
+                    gap: 13px;
+                }
+            }
+
+            @media (max-width: 360px) {
+                .mhs-stats {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+
+        @php
+            /*
+             * Gunakan nilai dari controller jika tersedia.
+             * Nilai cadangan nol hanya untuk mencegah error tampilan.
+             */
+            $hadir = $hadir ?? $totalHadir ?? 0;
+            $izin = $izin ?? $totalIzin ?? 0;
+            $sakit = $sakit ?? $totalSakit ?? 0;
+            $alfa = $alfa ?? $totalAlfa ?? 0;
+
+            $totalPresensi = (int) $hadir + (int) $izin
+                + (int) $sakit + (int) $alfa;
+        @endphp
+
+        <section class="mhs-hero">
+            <div class="mhs-hero-copy">
+                <div class="mhs-eyebrow">MAHASANTRI WORKSPACE</div>
+
+                <h2>
+                    Assalamu’alaikum,<br>
+                    {{ auth()->user()->name ?? 'Mahasantri' }}!
+                </h2>
+
+                <p>
+                    Selamat datang di Sistem Presensi SmartTrenMJ.
+                    Pantau presensi kegiatan, riwayat kehadiran, serta
+                    pengajuan izin atau sakit dari satu tempat.
+                </p>
+
+                <div class="mhs-hero-actions">
+                    <a class="mhs-btn-light"
+                       href="{{ route('mahasantri.presensi.index') }}">
+                        Buka presensi <span>↗</span>
+                    </a>
+
+                    <a class="mhs-btn-outline"
+                       href="{{ route('mahasantri.presensi.riwayat') }}">
+                        Lihat riwayat
+                    </a>
                 </div>
-
             </div>
 
-
-            {{-- =========================
-                 INFO
-            ========================= --}}
-
-            <div class="info-grid">
-
-                <div class="info-card">
-
-                    <div class="info-icon">
-                        📝
-                    </div>
-
-                    <h3 class="info-title">
-                        Presensi
-                    </h3>
-
-                    <p class="info-text">
-                        Lakukan presensi pada kegiatan yang sedang
-                        berlangsung.
-                    </p>
-
-                </div>
-
-
-                <div class="info-card">
-
-                    <div class="info-icon">
-                        📊
-                    </div>
-
-                    <h3 class="info-title">
-                        Rekap Kehadiran
-                    </h3>
-
-                    <p class="info-text">
-                        Lihat riwayat dan rekap kehadiran kamu
-                        pada berbagai kegiatan.
-                    </p>
-
-                </div>
-
-
-                <div class="info-card">
-
-                    <div class="info-icon">
-                        👤
-                    </div>
-
-                    <h3 class="info-title">
-                        Data Akun
-                    </h3>
-
-                    <p class="info-text">
-                        Informasi akun yang digunakan untuk sistem
-                        presensi SmartTren.
-                    </p>
-
-                </div>
-
+            <div class="mhs-hero-brand">
+                <div class="mhs-emblem"><span>🕌</span></div>
+                <strong>SMARTTREN</strong>
+                <small>Student Attendance Management</small>
             </div>
+        </section>
 
-
-            {{-- =========================
-                 MENU UTAMA
-            ========================= --}}
-
-            <div class="section-card">
-
-                <div class="section-heading">
-
-                    <div class="section-icon">
-                        📋
+        <section class="mhs-stats">
+            @foreach ([
+                ['label' => 'Hadir', 'value' => $hadir, 'icon' => '✓', 'color' => '#079b68', 'soft' => '#e2f6ed'],
+                ['label' => 'Izin', 'value' => $izin, 'icon' => 'i', 'color' => '#4385f5', 'soft' => '#e7efff'],
+                ['label' => 'Sakit', 'value' => $sakit, 'icon' => '+', 'color' => '#dc8b12', 'soft' => '#fff2dd'],
+                ['label' => 'Alfa', 'value' => $alfa, 'icon' => '!', 'color' => '#e34d63', 'soft' => '#ffe8ec'],
+            ] as $stat)
+                <article class="mhs-stat"
+                         style="--accent:{{ $stat['color'] }};--soft:{{ $stat['soft'] }}">
+                    <div class="mhs-stat-top">
+                        <span class="mhs-stat-label">{{ $stat['label'] }}</span>
+                        <span class="mhs-stat-icon">{{ $stat['icon'] }}</span>
                     </div>
 
+                    <div class="mhs-stat-number">{{ $stat['value'] }}</div>
+                    <div class="mhs-stat-note">Data presensi tersedia</div>
+                </article>
+            @endforeach
+        </section>
+
+        <section class="mhs-bottom-grid">
+
+            <div class="mhs-panel">
+                <div class="mhs-panel-heading">
                     <div>
-
-                        <h2>
-                            Menu Mahasantri
-                        </h2>
-
-                        <p>
-                            Akses fitur utama presensi kamu.
-                        </p>
-
+                        <h3>Ringkasan Kehadiran</h3>
+                        <p>Rekap status presensi kamu.</p>
                     </div>
-
+                    <span class="mhs-tag">ATTENDANCE</span>
                 </div>
 
-
-                <div class="menu-grid">
-
-                    {{-- PRESENSI --}}
-
-<a
-    href="{{ route('mahasantri.presensi.index') }}"
-    class="menu-card"
-    style="text-decoration: none; display: block; color: inherit;"
->
-
-    <div class="menu-icon">
-        📱
-    </div>
-
-    <h3>
-        Presensi Kegiatan
-    </h3>
-
-    <p>
-        Tampilkan QR Code kamu untuk melakukan
-        presensi pada kegiatan.
-    </p>
-
-    <div
-        class="menu-status"
-        style="
-            background: #dcf8e7;
-            color: #087443;
-        "
-    >
-        <span
-            class="menu-status-dot"
-            style="background: #087443;"
-        ></span>
-
-        Buka Presensi
-    </div>
-
-</a>
-
-
-                   {{-- RIWAYAT --}}
-
-<a
-    href="{{ route('mahasantri.presensi.riwayat') }}"
-    class="menu-card"
-    style="text-decoration: none; display: block; color: inherit;"
->
-
-    <div class="menu-icon">
-        📅
-    </div>
-
-    <h3>
-        Riwayat Presensi
-    </h3>
-
-    <p>
-        Lihat daftar kehadiran kamu berdasarkan
-        kegiatan dan tanggal.
-    </p>
-
-    <div
-        class="menu-status"
-        style="
-            background: #dcf8e7;
-            color: #087443;
-        "
-    >
-
-        <span
-            class="menu-status-dot"
-            style="background: #087443;"
-        ></span>
-
-        Lihat Riwayat
-
-    </div>
-
-</a>
-
-
-                    {{-- REKAP --}}
-
-                    <div class="menu-card">
-
-                        <div class="menu-icon">
-                            📈
-                        </div>
-
-                        <h3>
-                            Rekap Kehadiran
-                        </h3>
-
-                        <p>
-                            Lihat ringkasan jumlah hadir, izin,
-                            sakit, dan alpa.
-                        </p>
-
-                        <div class="menu-status">
-                            <span class="menu-status-dot"></span>
-                            Segera tersedia
-                        </div>
-
-                    </div>
-
+                <div class="mhs-total">
+                    <strong>{{ $totalPresensi }}</strong>
+                    <span>Total catatan presensi</span>
                 </div>
 
+                <div class="mhs-bar">
+                    @foreach ([
+                        ['value' => $hadir, 'color' => '#079b68'],
+                        ['value' => $izin, 'color' => '#4385f5'],
+                        ['value' => $sakit, 'color' => '#dc8b12'],
+                        ['value' => $alfa, 'color' => '#e34d63'],
+                    ] as $part)
+                        <span style="flex:{{ max(0, (int) $part['value']) }};background:{{ $part['color'] }}"></span>
+                    @endforeach
+                </div>
+
+                <div class="mhs-legend">
+                    @foreach ([
+                        ['label' => 'Hadir', 'value' => $hadir, 'color' => '#079b68'],
+                        ['label' => 'Izin', 'value' => $izin, 'color' => '#4385f5'],
+                        ['label' => 'Sakit', 'value' => $sakit, 'color' => '#dc8b12'],
+                        ['label' => 'Alfa', 'value' => $alfa, 'color' => '#e34d63'],
+                    ] as $item)
+                        <div class="mhs-legend-row"
+                             style="--dot:{{ $item['color'] }}">
+                            <span class="mhs-legend-dot"></span>
+                            <span>{{ $item['label'] }}</span>
+                            <strong>{{ $item['value'] }}</strong>
+                        </div>
+                    @endforeach
+                </div>
             </div>
 
-
-            {{-- =========================
-                 ACCOUNT
-            ========================= --}}
-
-            <div class="account-card">
-
-                <div class="account-row">
-
-                    <div class="avatar">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-
+            <div class="mhs-panel">
+                <div class="mhs-panel-heading">
                     <div>
-
-                        <h3 class="account-name">
-                            {{ auth()->user()->name }}
-                        </h3>
-
-                        <p class="account-email">
-                            {{ auth()->user()->email }}
-                        </p>
-
+                        <h3>Akses Cepat</h3>
+                        <p>Menu utama untuk aktivitasmu.</p>
                     </div>
-
-                    <div class="role-badge">
-                        Mahasantri
-                    </div>
-
+                    <span class="mhs-tag">QUICK ACCESS</span>
                 </div>
 
+                <a class="mhs-quick-item"
+                   href="{{ route('mahasantri.presensi.index') }}">
+                    <span class="mhs-quick-number">01</span>
+                    <span class="mhs-quick-copy">
+                        <strong>Presensi Kegiatan</strong>
+                        <small>Lihat kegiatan dan akses presensi yang tersedia.</small>
+                    </span>
+                    <span class="mhs-quick-arrow">↗</span>
+                </a>
+
+                <a class="mhs-quick-item"
+                   href="{{ route('mahasantri.presensi.riwayat') }}">
+                    <span class="mhs-quick-number">02</span>
+                    <span class="mhs-quick-copy">
+                        <strong>Riwayat Presensi</strong>
+                        <small>Periksa catatan kehadiran berdasarkan tanggal.</small>
+                    </span>
+                    <span class="mhs-quick-arrow">↗</span>
+                </a>
+
+                <a class="mhs-quick-item"
+                   href="{{ route('mahasantri.pengajuan-izin.index') }}">
+                    <span class="mhs-quick-number">03</span>
+                    <span class="mhs-quick-copy">
+                        <strong>Pengajuan Izin / Sakit</strong>
+                        <small>Ajukan izin jika berhalangan mengikuti kegiatan.</small>
+                    </span>
+                    <span class="mhs-quick-arrow">↗</span>
+                </a>
+
+                <a class="mhs-quick-item"
+                   href="{{ route('profile.edit') }}">
+                    <span class="mhs-quick-number">04</span>
+                    <span class="mhs-quick-copy">
+                        <strong>Data Akun</strong>
+                        <small>Periksa informasi akun kamu.</small>
+                    </span>
+                    <span class="mhs-quick-arrow">↗</span>
+                </a>
             </div>
 
-        </div>
-
+        </section>
     </div>
-
 </x-app-layout>

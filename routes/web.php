@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\PengajuanIzinController;
+use App\Http\Controllers\AdminLaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
@@ -74,6 +75,16 @@ Route::middleware(['auth', 'role:admin'])
             DashboardController::class,
             'admin'
         ])->name('dashboard');
+
+        Route::get('/laporan', [
+    AdminLaporanController::class,
+    'index'
+])->name('laporan.index');
+
+Route::get('/laporan/pdf', [
+    AdminLaporanController::class,
+    'pdf'
+])->name('laporan.pdf');
 
 
         /*
@@ -343,6 +354,15 @@ Route::middleware(['auth', 'role:pengurus'])
             'generateAlpa'
         ])->name('presensi.generate-alpa');
 
+       Route::get('/pengajuan-izin/create', [
+    PengajuanIzinController::class,
+    'create'
+])->name('mahasantri.pengajuan-izin.create');
+
+Route::post('/pengajuan-izin', [
+    PengajuanIzinController::class,
+    'store'
+])->name('mahasantri.pengajuan-izin.store');
     });
 
 
@@ -391,10 +411,30 @@ Route::middleware(['auth', 'role:mahasantri'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/mahasantri/riwayat-presensi', [
-            MahasantriPresensiController::class,
-            'riwayat'
-        ])->name('mahasantri.presensi.riwayat');
+        Route::get('/mahasantri/pengajuan-izin', [
+    PengajuanIzinController::class,
+    'index',
+])->name('mahasantri.pengajuan-izin.index');
+
+Route::get('/mahasantri/pengajuan-izin/create', [
+    PengajuanIzinController::class,
+    'create',
+])->name('mahasantri.pengajuan-izin.create');
+
+Route::post('/mahasantri/pengajuan-izin', [
+    PengajuanIzinController::class,
+    'store',
+])->name('mahasantri.pengajuan-izin.store');
+
+Route::get('/mahasantri/presensi', [
+    MahasantriPresensiController::class,
+    'index'
+])->name('mahasantri.presensi.index');
+
+Route::get('/mahasantri/riwayat-presensi', [
+    MahasantriPresensiController::class,
+    'riwayat'
+])->name('mahasantri.presensi.riwayat');
 
     });
 

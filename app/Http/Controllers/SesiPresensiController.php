@@ -13,18 +13,38 @@ class SesiPresensiController extends Controller
     /**
      * Menampilkan daftar sesi presensi.
      */
-    public function index()
-    {
-        $sesi = SesiPresensi::with('kegiatan')
-            ->latest('tanggal')
-            ->latest('jam_mulai')
-            ->paginate(10);
+    
 
-        return view(
-            'pengurus.sesi-presensi.index',
-            compact('sesi')
-        );
+public function index(Request $request)
+{
+    $query = SesiPresensi::with('kegiatan');
+
+    if ($request->filled('tanggal')) {
+        $query->whereDate('tanggal', $request->tanggal);
     }
+
+    if ($request->filled('kegiatan_id')) {
+        $query->where('kegiatan_id', $request->kegiatan_id);
+    }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    $sesi = $query
+        ->latest('tanggal')
+        ->latest('jam_mulai')
+        ->paginate(10)
+        ->withQueryString();
+
+    $kegiatan = Kegiatan::orderBy('nama_kegiatan')->get();
+
+    return view(
+        'pengurus.sesi-presensi.index',
+        compact('sesi', 'kegiatan')
+    );
+}
+
 
     /**
      * Form membuat sesi presensi.

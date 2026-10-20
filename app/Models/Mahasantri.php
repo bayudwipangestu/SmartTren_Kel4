@@ -35,4 +35,12 @@ class Mahasantri extends Model
         'mahasantri_id'
     );
 }
+
+public function pengajuanIzins(): HasMany
+{
+    return $this->hasMany(
+        PengajuanIzin::class,
+        'mahasantri_id'
+    );
+}
 }

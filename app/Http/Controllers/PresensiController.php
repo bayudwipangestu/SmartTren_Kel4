@@ -19,18 +19,36 @@ class PresensiController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $sesi = SesiPresensi::with('kegiatan')
-            ->latest('tanggal')
-            ->latest('jam_mulai')
-            ->paginate(10);
+    
+public function index(Request $request)
+{
+    $query = SesiPresensi::with('kegiatan');
 
-        return view(
-            'pengurus.presensi.index',
-            compact('sesi')
-        );
+    if ($request->filled('tanggal')) {
+        $query->whereDate('tanggal', $request->tanggal);
     }
+
+    if ($request->filled('kegiatan_id')) {
+        $query->where('kegiatan_id', $request->kegiatan_id);
+    }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    $sesi = $query
+        ->latest('tanggal')
+        ->latest('jam_mulai')
+        ->paginate(10)
+        ->withQueryString();
+
+    $kegiatan = Kegiatan::orderBy('nama_kegiatan')->get();
+
+    return view(
+        'pengurus.sesi-presensi.index',
+        compact('sesi', 'kegiatan')
+    );
+}
 
 
     /*
@@ -55,154 +73,164 @@ class PresensiController extends Controller
     | PROSES SCAN QR
     |--------------------------------------------------------------------------
     */
+public function scan(
+    Request $request,
+    SesiPresensi $sesiPresensi
+) {
+    $validated = $request->validate([
+        'qr_code' => [
+            'required',
+            'string',
+            'max:100',
+        ],
+    ]);
 
-    public function scan(
-        Request $request,
-        SesiPresensi $sesiPresensi
-    ) {
-        $validated = $request->validate([
-            'qr_code' => [
-                'required',
-                'string',
-                'max:100',
-            ],
+    // Periksa status sesi.
+if ($sesiPresensi->status !== 'aktif') {
+    return response()->json([
+        'success' => false,
+        'message' => 'Sesi presensi belum aktif atau sudah tidak aktif.',
+    ], 422);
+}
+
+// Gunakan zona waktu WIB.
+$sekarang = Carbon::now('Asia/Jakarta');
+
+$tanggalSesi = Carbon::parse(
+    $sesiPresensi->tanggal->format('Y-m-d'),
+    'Asia/Jakarta'
+);
+
+$waktuMulai = Carbon::parse(
+    $tanggalSesi->format('Y-m-d') . ' ' . $sesiPresensi->jam_mulai,
+    'Asia/Jakarta'
+);
+
+$waktuSelesai = Carbon::parse(
+    $tanggalSesi->format('Y-m-d') . ' ' . $sesiPresensi->jam_selesai,
+    'Asia/Jakarta'
+);
+
+// Tolak scan sebelum jadwal dimulai.
+if ($sekarang->lt($waktuMulai)) {
+    return response()->json([
+        'success' => false,
+        'message' => 'Presensi belum dibuka. Jadwal mulai pukul '
+            . $waktuMulai->format('H:i') . ' WIB.',
+    ], 422);
+}
+
+// Tolak scan setelah jadwal selesai.
+if ($sekarang->greaterThanOrEqualTo($waktuSelesai)) {
+    $sesiPresensi->update([
+        'status' => 'selesai',
+    ]);
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Waktu presensi sudah berakhir.',
+    ], 422);
+}
+
+    // Periksa batas waktu presensi menggunakan zona waktu Jakarta.
+    $sekarang = Carbon::now('Asia/Jakarta');
+
+    $tanggalSesi = Carbon::parse(
+        $sesiPresensi->tanggal->format('Y-m-d'),
+        'Asia/Jakarta'
+    )->format('Y-m-d');
+
+    $waktuSelesai = Carbon::parse(
+        $tanggalSesi . ' ' . $sesiPresensi->jam_selesai,
+        'Asia/Jakarta'
+    );
+
+    if ($sekarang->greaterThanOrEqualTo($waktuSelesai)) {
+        $sesiPresensi->update([
+            'status' => 'selesai',
         ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | CEK STATUS SESI
-        |--------------------------------------------------------------------------
-        */
-
-        if ($sesiPresensi->status !== 'aktif') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sesi presensi sudah tidak aktif.',
-            ], 422);
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CARI MAHASANTRI
-        |--------------------------------------------------------------------------
-        */
-
-        $mahasantri = Mahasantri::with('user')
-            ->where(
-                'qr_code',
-                $validated['qr_code']
-            )
-            ->first();
-
-        if (! $mahasantri) {
-            return response()->json([
-                'success' => false,
-                'message' => 'QR Code tidak terdaftar.',
-            ], 404);
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CEK PRESENSI DUPLIKAT
-        |--------------------------------------------------------------------------
-        */
-
-        $sudahPresensi = Presensi::where(
-            'sesi_presensi_id',
-            $sesiPresensi->id
-        )
-            ->where(
-                'mahasantri_id',
-                $mahasantri->id
-            )
-            ->exists();
-
-        if ($sudahPresensi) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mahasantri sudah melakukan presensi.',
-            ], 422);
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SIMPAN PRESENSI
-        |--------------------------------------------------------------------------
-        */
-
-        $presensi = Presensi::create([
-            'sesi_presensi_id' => $sesiPresensi->id,
-            'mahasantri_id' => $mahasantri->id,
-            'status' => 'hadir',
-            'waktu_presensi' => now(),
-        ]);
-
 
         return response()->json([
-            'success' => true,
-            'message' => 'Presensi berhasil.',
-            'data' => [
-                'nama' => $mahasantri->user?->name
-                    ?? $mahasantri->nama,
-
-                'nim' => $mahasantri->nim,
-
-                'status' => $presensi->status,
-
-                'waktu' => $presensi->waktu_presensi
-                    ->format('H:i:s'),
-            ],
-        ]);
+            'success' => false,
+            'message' => 'Waktu presensi sudah berakhir.',
+        ], 422);
     }
 
+    // Cari data mahasantri berdasarkan QR Code.
+    $mahasantri = Mahasantri::with('user')
+        ->where('qr_code', $validated['qr_code'])
+        ->first();
 
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE STATUS PRESENSI
-    |--------------------------------------------------------------------------
-    |
-    | Hadir / Izin / Sakit / Alpa
-    |
-    */
-
-    public function update(
-        Request $request,
-        Presensi $presensi
-    ) {
-        $validated = $request->validate([
-            'status' => [
-                'required',
-                'in:hadir,izin,sakit,alpa',
-            ],
-
-            'keterangan' => [
-                'nullable',
-                'string',
-                'max:1000',
-            ],
-        ]);
-
-
-        $presensi->update([
-            'status' => $validated['status'],
-
-            'keterangan' =>
-                $validated['keterangan'] ?? null,
-
-            'waktu_presensi' =>
-                $presensi->waktu_presensi ?? now(),
-        ]);
-
-
-        return back()->with(
-            'success',
-            'Status presensi berhasil diperbarui.'
-        );
+    if (! $mahasantri) {
+        return response()->json([
+            'success' => false,
+            'message' => 'QR Code tidak terdaftar.',
+        ], 404);
     }
 
+    // Cegah presensi ganda pada sesi yang sama.
+    $sudahPresensi = Presensi::where(
+        'sesi_presensi_id',
+        $sesiPresensi->id
+    )
+        ->where('mahasantri_id', $mahasantri->id)
+        ->exists();
+
+    if ($sudahPresensi) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Mahasantri sudah melakukan presensi.',
+        ], 422);
+    }
+
+    // Simpan presensi.
+    $presensi = Presensi::create([
+        'sesi_presensi_id' => $sesiPresensi->id,
+        'mahasantri_id' => $mahasantri->id,
+        'status' => 'hadir',
+        'waktu_presensi' => $sekarang,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Presensi berhasil.',
+        'data' => [
+            'nama' => $mahasantri->user?->name
+                ?? $mahasantri->nama,
+            'nim' => $mahasantri->nim,
+            'status' => $presensi->status,
+            'waktu' => $presensi->waktu_presensi
+                ->format('H:i:s'),
+        ],
+    ]);
+}
+
+
+   
+/*
+|--------------------------------------------------------------------------
+| UPDATE STATUS PRESENSI
+|--------------------------------------------------------------------------
+*/
+
+public function update(Request $request, Presensi $presensi)
+{
+    $validated = $request->validate([
+        'status' => 'required|in:hadir,izin,sakit,alpa',
+        'keterangan' => 'nullable|string|max:1000',
+    ]);
+
+    $presensi->status = $validated['status'];
+    $presensi->keterangan = $validated['keterangan'] ?? null;
+
+    // Jangan mengubah waktu presensi jika status hanya diedit.
+    $presensi->save();
+
+    return back()->with(
+        'success',
+        'Status presensi berhasil diperbarui.'
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -210,30 +238,53 @@ class PresensiController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function rekap(SesiPresensi $sesiPresensi)
-    {
-        $sesiPresensi->load('kegiatan');
+    
+public function rekap(SesiPresensi $sesiPresensi)
+{
+    $sesiPresensi->load('kegiatan');
 
-        $presensi = Presensi::with([
-            'mahasantri.user',
-        ])
-            ->where(
-                'sesi_presensi_id',
-                $sesiPresensi->id
-            )
-            ->orderBy('status')
-            ->orderBy('created_at')
-            ->get();
+    // Ambil semua mahasantri beserta data user.
+    $mahasantri = Mahasantri::with('user')
+        ->get();
 
-        return view(
-            'pengurus.presensi.rekap',
-            compact(
-                'sesiPresensi',
-                'presensi'
-            )
-        );
-    }
+    // Ambil catatan presensi untuk sesi yang dipilih.
+    $dataPresensi = Presensi::with('mahasantri.user')
+        ->where('sesi_presensi_id', $sesiPresensi->id)
+        ->get()
+        ->keyBy('mahasantri_id');
 
+    // Pastikan setiap mahasantri muncul di rekap.
+    $presensi = $mahasantri->map(function ($item) use (
+        $dataPresensi,
+        $sesiPresensi
+    ) {
+        $catatan = $dataPresensi->get($item->id);
+
+        // Jika belum ada catatan, buat objek tampilan sementara.
+        if (!$catatan) {
+            $catatan = new Presensi();
+
+            $catatan->sesi_presensi_id = $sesiPresensi->id;
+            $catatan->mahasantri_id = $item->id;
+            $catatan->status = 'belum_presensi';
+            $catatan->waktu_presensi = null;
+            $catatan->keterangan = null;
+            $catatan->setRelation('mahasantri', $item);
+        }
+
+        return $catatan;
+    });
+
+    // Urutkan berdasarkan nama mahasantri.
+    $presensi = $presensi->sortBy(function ($item) {
+        return $item->mahasantri?->user?->name ?? '';
+    })->values();
+
+    return view(
+        'pengurus.presensi.rekap',
+        compact('sesiPresensi', 'presensi')
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -1362,24 +1413,15 @@ class PresensiController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function generateAlpa(
-        SesiPresensi $sesiPresensi
-    ) {
-
-        /*
-        |--------------------------------------------------------------------------
-        | CEK STATUS SESI
-        |--------------------------------------------------------------------------
-        */
-
-        if ($sesiPresensi->status === 'aktif') {
-
+    public function generateAlpa(SesiPresensi $sesiPresensi)
+    {
+        // Alpa hanya dapat dibuat setelah sesi benar-benar selesai.
+        if ($sesiPresensi->status !== 'selesai') {
             return back()->with(
                 'error',
-                'Sesi masih aktif. Selesaikan sesi terlebih dahulu sebelum membuat Alpa.'
+                'Sesi belum selesai. Alpa hanya dapat dibuat setelah sesi selesai.'
             );
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -1429,4 +1471,6 @@ class PresensiController extends Controller
             'Data Alpa berhasil dibuat untuk Mahasantri yang belum melakukan presensi.'
         );
     }
+
+
 }

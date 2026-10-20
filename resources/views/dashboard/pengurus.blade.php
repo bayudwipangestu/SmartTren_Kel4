@@ -1,903 +1,847 @@
 <x-app-layout>
-
     <style>
-
-        /* =========================================================
-           SMARTTREN PENGURUS DASHBOARD
-        ========================================================= */
-
-        .st-dashboard {
-            min-height: calc(100vh - 65px);
-            background: #f6f8f7;
-            color: #17211b;
+        .pengurus-dashboard {
+            --green: #078653;
+            --green-dark: #104b38;
+            --muted: #829087;
+            --border: #e5ece7;
+            color: #18382b;
+            font-size: 13px;
         }
 
-        .st-container {
-            width: min(1180px, calc(100% - 40px));
+        .pengurus-dashboard * {
+            box-sizing: border-box;
+        }
+
+        .pengurus-dashboard .container-dashboard {
+            width: 100%;
+            max-width: 1500px;
             margin: 0 auto;
-            padding: 32px 0 50px;
+            padding: 24px 28px;
         }
 
+        /* Header */
+        .pengurus-dashboard .top-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
 
-        /* =========================================================
-           HEADER
-        ========================================================= */
+        .pengurus-dashboard .breadcrumb {
+            margin-bottom: 8px;
+            color: #829087;
+            font-size: 11px;
+        }
 
-        .st-page-header {
+        .pengurus-dashboard .page-title {
+            margin: 0;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+            color: #123f30;
+        }
+
+        .pengurus-dashboard .page-subtitle {
+            margin-top: 7px;
+            color: #7b8981;
+            font-size: 12px;
+        }
+
+        .pengurus-dashboard .heading-right {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 24px;
+            gap: 12px;
         }
 
-        .st-page-title {
-            margin: 0;
-            font-size: 26px;
-            font-weight: 750;
-            letter-spacing: -0.5px;
-            color: #17211b;
-        }
-
-        .st-page-subtitle {
-            margin: 6px 0 0;
-            font-size: 14px;
-            color: #718078;
-        }
-
-        .st-role {
+        .pengurus-dashboard .status-pill {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 13px;
-            border-radius: 999px;
-            background: #e9f8ef;
-            color: #168047;
-            font-size: 13px;
+            gap: 7px;
+            padding: 9px 12px;
+            border: 1px solid #d6eee1;
+            border-radius: 9px;
+            background: #eaf8f0;
+            color: #087f52;
+            font-size: 11px;
             font-weight: 700;
-            white-space: nowrap;
         }
 
-        .st-role-dot {
+        .pengurus-dashboard .status-dot {
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: #22a55a;
+            background: #10b981;
         }
 
-
-        /* =========================================================
-           HERO
-        ========================================================= */
-
-        .st-hero {
-            position: relative;
-            overflow: hidden;
-            min-height: 230px;
-            padding: 32px;
-            margin-bottom: 25px;
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    120deg,
-                    #087443 0%,
-                    #10945a 52%,
-                    #18a765 100%
-                );
-
-            box-shadow:
-                0 15px 35px rgba(13, 116, 67, .15);
-        }
-
-        .st-hero::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            right: -100px;
-            top: -140px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.09);
-        }
-
-        .st-hero::after {
-            content: "";
-            position: absolute;
-            width: 220px;
-            height: 220px;
-            right: 110px;
-            bottom: -160px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.07);
-        }
-
-        .st-hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-        }
-
-        .st-hero-label {
-            margin-bottom: 10px;
-            color: #bdf1d2;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-        }
-
-        .st-hero-title {
-            margin: 0;
-            color: white;
-            font-size: 30px;
-            line-height: 1.25;
-            font-weight: 800;
-            letter-spacing: -.7px;
-        }
-
-        .st-hero-text {
-            max-width: 610px;
-            margin: 11px 0 22px;
-            color: #e5f7eb;
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .st-primary-button {
+        .pengurus-dashboard .primary-button {
             display: inline-flex;
             align-items: center;
-            gap: 9px;
-            padding: 11px 17px;
-            border-radius: 11px;
-            background: white;
-            color: #087443;
-            font-size: 13px;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 15px;
+            border-radius: 9px;
+            background: var(--green);
+            color: white;
+            font-size: 12px;
             font-weight: 750;
             text-decoration: none;
             transition: .2s ease;
-            box-shadow: 0 7px 18px rgba(0,0,0,.12);
         }
 
-        .st-primary-button:hover {
-            transform: translateY(-2px);
-            background: #f3fff7;
+        .pengurus-dashboard .primary-button:hover {
+            background: #066d43;
+            transform: translateY(-1px);
         }
 
-        .st-primary-button svg {
-            width: 18px !important;
-            height: 18px !important;
-            flex: 0 0 18px;
-        }
-
-
-        /* =========================================================
-           SECTION
-        ========================================================= */
-
-        .st-section {
-            margin-bottom: 28px;
-        }
-
-        .st-section-header {
-            margin-bottom: 13px;
-        }
-
-        .st-section-title {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 750;
-            color: #17211b;
-        }
-
-        .st-section-text {
-            margin: 4px 0 0;
-            color: #7a877f;
-            font-size: 13px;
-        }
-
-
-        /* =========================================================
-           RINGKASAN
-        ========================================================= */
-
-        .st-stat-grid {
-            display: grid;
-
-            /* DARI 4 KOLOM MENJADI 2 KOLOM */
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 15px;
-        }
-
-        .st-stat {
+        /* Welcome banner */
+        .pengurus-dashboard .welcome-banner {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            min-width: 0;
-            padding: 18px;
-            border: 1px solid #e7ece9;
+            gap: 25px;
+            overflow: hidden;
+            min-height: 225px;
+            margin-bottom: 22px;
+            padding: 32px 35px;
             border-radius: 17px;
-            background: white;
-            box-shadow: 0 4px 15px rgba(23,33,27,.035);
+            background: linear-gradient(115deg, #103f32 0%, #087650 70%, #078653 100%);
+            color: white;
+        }
+
+        .pengurus-dashboard .welcome-banner::before {
+            position: absolute;
+            top: -190px;
+            right: 16%;
+            width: 400px;
+            height: 400px;
+            border: 35px solid rgba(255, 255, 255, .035);
+            border-radius: 50%;
+            content: "";
+            pointer-events: none;
+        }
+
+        .pengurus-dashboard .welcome-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+        }
+
+        .pengurus-dashboard .eyebrow {
+            margin-bottom: 14px;
+            color: #a8f0cf;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .pengurus-dashboard .welcome-title {
+            margin: 0;
+            color: white;
+            font-size: clamp(23px, 2.4vw, 34px);
+            font-weight: 850;
+            line-height: 1.25;
+            letter-spacing: -.7px;
+        }
+
+        .pengurus-dashboard .welcome-description {
+            max-width: 650px;
+            margin-top: 12px;
+            color: #d6eee5;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+
+        .pengurus-dashboard .welcome-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .pengurus-dashboard .banner-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 14px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 8px;
+            color: white;
+            font-size: 11px;
+            font-weight: 750;
             text-decoration: none;
             transition: .2s ease;
         }
 
-        .st-stat:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(23,33,27,.08);
-            border-color: #cde8d8;
+        .pengurus-dashboard .banner-button-light {
+            border-color: white;
+            background: white;
+            color: #104b38;
         }
 
-        .st-stat-label {
-            margin: 0 0 5px;
-            color: #77837c;
+        .pengurus-dashboard .banner-button:hover {
+            background: rgba(255, 255, 255, .12);
+        }
+
+        .pengurus-dashboard .banner-button-light:hover {
+            background: #e9f7ef;
+        }
+
+        .pengurus-dashboard .brand-mark {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 190px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, .18);
+            text-align: center;
+        }
+
+        .pengurus-dashboard .brand-symbol {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 82px;
+            height: 82px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, .35);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, .07);
+            color: white;
+            font-size: 27px;
+            font-weight: 900;
+            transform: rotate(45deg);
+        }
+
+        .pengurus-dashboard .brand-symbol span {
+            transform: rotate(-45deg);
+        }
+
+        .pengurus-dashboard .brand-name {
+            font-size: 12px;
+            font-weight: 850;
+            letter-spacing: 2px;
+        }
+
+        .pengurus-dashboard .brand-caption {
+            margin-top: 5px;
+            color: #c3e7d8;
+            font-size: 9px;
+        }
+
+        /* Statistics */
+        .pengurus-dashboard .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .pengurus-dashboard .stat-card {
+            position: relative;
+            overflow: hidden;
+            min-width: 0;
+            padding: 19px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 3px 9px rgba(24, 56, 43, .035);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .pengurus-dashboard .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(24, 56, 43, .08);
+        }
+
+        .pengurus-dashboard .stat-card::after {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent, #078653);
+            content: "";
+        }
+
+        .pengurus-dashboard .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .pengurus-dashboard .stat-label {
+            color: #66786d;
             font-size: 12px;
             font-weight: 600;
         }
 
-        .st-stat-value {
-            margin: 0;
-            color: #1c2921;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .st-stat-icon {
+        .pengurus-dashboard .stat-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
-            flex: 0 0 45px;
-            border-radius: 13px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--icon-bg, #e5f5eb);
+            color: var(--accent, #078653);
+            font-size: 11px;
+            font-weight: 850;
         }
 
-        .st-stat-icon svg {
-            width: 22px !important;
-            height: 22px !important;
+        .pengurus-dashboard .stat-value {
+            margin-top: 20px;
+            color: #103f30;
+            font-size: 31px;
+            font-weight: 850;
+            line-height: 1.1;
         }
 
-        .st-green {
-            background: #e9f8ef;
-            color: #168047;
+        .pengurus-dashboard .stat-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 17px;
         }
 
-        .st-blue {
-            background: #eaf3ff;
-            color: #2674c9;
+        .pengurus-dashboard .stat-note {
+            color: #92a097;
+            font-size: 10px;
         }
 
-        .st-yellow {
-            background: #fff7df;
-            color: #bd8a00;
-        }
-
-        .st-red {
-            background: #ffeded;
-            color: #d23b3b;
-        }
-
-
-        /* =========================================================
-           MENU
-        ========================================================= */
-
-        .st-menu-grid {
-            display: grid;
-
-            /* DARI 3 KOLOM MENJADI 2 KOLOM */
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 17px;
-        }
-
-        .st-menu-card {
-            display: block;
-            padding: 21px;
-            border: 1px solid #e6ece8;
-            border-radius: 18px;
-            background: white;
+        .pengurus-dashboard .stat-link {
+            color: var(--green);
+            font-size: 10px;
+            font-weight: 800;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(23,33,27,.035);
-            transition:
-                transform .2s ease,
-                box-shadow .2s ease,
-                border-color .2s ease;
         }
 
-        .st-menu-card:hover {
-            transform: translateY(-4px);
-            border-color: #cde8d8;
-            box-shadow: 0 14px 30px rgba(23,33,27,.09);
+        /* Content panels */
+        .pengurus-dashboard .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
         }
 
-        .st-menu-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            margin-bottom: 17px;
+        .pengurus-dashboard .panel {
+            min-width: 0;
+            padding: 21px;
+            border: 1px solid var(--border);
             border-radius: 14px;
+            background: white;
+            box-shadow: 0 3px 9px rgba(24, 56, 43, .025);
         }
 
-        .st-menu-icon svg {
-            width: 23px !important;
-            height: 23px !important;
-        }
-
-        .st-menu-icon.green {
-            background: #e9f8ef;
-            color: #168047;
-        }
-
-        .st-menu-icon.blue {
-            background: #eaf3ff;
-            color: #2674c9;
-        }
-
-        .st-menu-icon.red {
-            background: #ffeded;
-            color: #d23b3b;
-        }
-
-        .st-menu-title {
-            margin: 0;
-            color: #1a251e;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .st-menu-description {
-            min-height: 42px;
-            margin: 7px 0 13px;
-            color: #78847d;
-            font-size: 13px;
-            line-height: 1.65;
-        }
-
-        .st-menu-link {
-            color: #168047;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .st-menu-link.blue {
-            color: #2674c9;
-        }
-
-        .st-menu-link.red {
-            color: #d23b3b;
-        }
-
-
-        /* =========================================================
-           INFO
-        ========================================================= */
-
-        .st-info {
+        .pengurus-dashboard .panel-header {
             display: flex;
             align-items: flex-start;
-            gap: 14px;
-            padding: 18px 20px;
-            border: 1px solid #ccebd8;
-            border-radius: 17px;
-            background: #effaf3;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 17px;
         }
 
-        .st-info-icon {
+        .pengurus-dashboard .panel-title {
+            margin: 0;
+            color: #164531;
+            font-size: 15px;
+            font-weight: 850;
+        }
+
+        .pengurus-dashboard .panel-description {
+            margin-top: 5px;
+            color: #89968e;
+            font-size: 11px;
+        }
+
+        .pengurus-dashboard .panel-tag {
+            flex-shrink: 0;
+            padding: 7px 9px;
+            border-radius: 6px;
+            background: #f0f5f1;
+            color: #718178;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .7px;
+        }
+
+        .pengurus-dashboard .quick-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pengurus-dashboard .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-top: 1px solid #edf1ee;
+            color: inherit;
+            text-decoration: none;
+            transition: padding .2s ease;
+        }
+
+        .pengurus-dashboard .quick-link:first-child {
+            border-top: 0;
+        }
+
+        .pengurus-dashboard .quick-link:hover {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+        .pengurus-dashboard .quick-number {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 38px;
-            height: 38px;
-            flex: 0 0 38px;
-            border-radius: 11px;
-            background: #168047;
-            color: white;
+            width: 37px;
+            height: 37px;
+            flex-shrink: 0;
+            border: 1px solid #dfe9e2;
+            border-radius: 9px;
+            background: #f7faf8;
+            color: #267451;
+            font-size: 10px;
+            font-weight: 850;
         }
 
-        .st-info-icon svg {
-            width: 19px !important;
-            height: 19px !important;
-        }
-
-        .st-info-title {
-            margin: 0 0 3px;
-            color: #126c3c;
-            font-size: 13px;
+        .pengurus-dashboard .quick-title {
+            color: #244a37;
+            font-size: 11px;
             font-weight: 800;
         }
 
-        .st-info-text {
-            margin: 0;
-            color: #397052;
-            font-size: 12px;
-            line-height: 1.7;
+        .pengurus-dashboard .quick-description {
+            margin-top: 4px;
+            color: #8a978f;
+            font-size: 10px;
+            line-height: 1.5;
         }
 
-
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
-
-        @media (max-width: 900px) {
-
-            .st-stat-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .st-menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .st-hero-title {
-                font-size: 26px;
-            }
-
+        .pengurus-dashboard .quick-arrow {
+            margin-left: auto;
+            color: #7c9284;
+            font-size: 19px;
         }
 
+        /* Table */
+        .pengurus-dashboard .table-panel {
+            overflow: hidden;
+            padding: 0;
+            margin-bottom: 20px;
+        }
 
-        @media (max-width: 640px) {
+        .pengurus-dashboard .table-panel .panel-header {
+            padding: 20px 21px;
+            margin-bottom: 0;
+        }
 
-            .st-container {
-                width: min(100% - 24px, 1180px);
-                padding-top: 20px;
+        .pengurus-dashboard .table-wrap {
+            overflow-x: auto;
+        }
+
+        .pengurus-dashboard .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .pengurus-dashboard .data-table th {
+            padding: 13px 18px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: #f6f9f7;
+            color: #77867c;
+            font-size: 10px;
+            font-weight: 850;
+            letter-spacing: .45px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .pengurus-dashboard .data-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #edf1ee;
+            color: #4d6557;
+            font-size: 11px;
+        }
+
+        .pengurus-dashboard .empty-state {
+            padding: 30px 15px !important;
+            color: #89968e !important;
+            text-align: center;
+            line-height: 1.9;
+        }
+
+        .pengurus-dashboard .text-link {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .pengurus-dashboard .text-link:hover {
+            text-decoration: underline;
+        }
+
+        .pengurus-dashboard .footer-note {
+            padding: 2px 0 10px;
+            color: #9aa69e;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        @@media (max-width: 1100px) {
+            .pengurus-dashboard .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            .st-page-header {
-                align-items: flex-start;
+            .pengurus-dashboard .brand-mark {
+                width: 145px;
             }
 
-            .st-role {
-                display: none;
+            .pengurus-dashboard .content-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @@media (max-width: 650px) {
+            .pengurus-dashboard .container-dashboard {
+                padding: 18px 14px;
             }
 
-            .st-page-title {
-                font-size: 22px;
-            }
-
-            .st-hero {
-                padding: 24px;
-                border-radius: 18px;
-            }
-
-            .st-hero-title {
+            .pengurus-dashboard .page-title {
                 font-size: 23px;
             }
 
-            .st-stat-grid {
-                grid-template-columns: 1fr;
+            .pengurus-dashboard .top-heading {
+                align-items: flex-start;
             }
 
-            .st-stat {
+            .pengurus-dashboard .heading-right {
+                flex-wrap: wrap;
+            }
+
+            .pengurus-dashboard .welcome-banner {
+                min-height: 0;
+                padding: 25px 21px;
+            }
+
+            .pengurus-dashboard .brand-mark {
+                display: none;
+            }
+
+            .pengurus-dashboard .welcome-title {
+                font-size: 24px;
+            }
+
+            .pengurus-dashboard .stats-grid {
+                gap: 10px;
+            }
+
+            .pengurus-dashboard .stat-card {
+                padding: 13px;
+            }
+
+            .pengurus-dashboard .stat-value {
+                margin-top: 15px;
+                font-size: 26px;
+            }
+
+            .pengurus-dashboard .stat-bottom {
+                align-items: flex-start;
+                flex-direction: column;
+                margin-top: 12px;
+            }
+
+            .pengurus-dashboard .panel {
+                padding: 15px;
+            }
+
+            .pengurus-dashboard .table-panel {
+                padding: 0;
+            }
+
+            .pengurus-dashboard .table-panel .panel-header {
                 padding: 16px;
             }
-
-            .st-menu-card {
-                padding: 18px;
-            }
-
         }
-
     </style>
 
+    <div class="pengurus-dashboard">
+        <main class="container-dashboard">
 
-    {{-- =========================================================
-       HEADER BREEZE
-    ========================================================= --}}
+            {{-- PAGE HEADING --}}
+            <header class="top-heading">
+                <div>
+                    <div class="breadcrumb">Workspace&nbsp; / &nbsp;Pengurus&nbsp; / &nbsp;Dashboard</div>
+                    <h1 class="page-title">Dashboard Pengurus</h1>
+                    <p class="page-subtitle">
+                        Ringkasan operasional dan pengelolaan presensi SmartTrenMJ.
+                    </p>
+                </div>
 
-    <x-slot name="header">
+                <div class="heading-right">
+                    <span class="status-pill">
+                        <span class="status-dot"></span>
+                        Sistem aktif
+                    </span>
 
-        <div class="st-page-header">
+                    <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                       class="primary-button">
+                        <span aria-hidden="true">＋</span>
+                        Sesi Presensi
+                    </a>
+                </div>
+            </header>
 
-            <div>
+            {{-- WELCOME BANNER --}}
+            <section class="welcome-banner">
+                <div class="welcome-copy">
+                    <div class="eyebrow">Pengurus Workspace</div>
 
-                <h2 class="st-page-title">
-                    Dashboard Pengurus
-                </h2>
+                    <h2 class="welcome-title">
+                        Selamat datang, {{ auth()->user()->name ?? 'Pengurus' }}.
+                    </h2>
 
-                <p class="st-page-subtitle">
-                    Kelola presensi dan kegiatan Mahasantri SmartTren.
-                </p>
+                    <p class="welcome-description">
+                        Kelola sesi presensi, pantau kehadiran mahasantri,
+                        dan periksa laporan kegiatan pesantren dari satu tempat.
+                    </p>
 
-            </div>
+                    <div class="welcome-actions">
+                        <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                           class="banner-button banner-button-light">
+                            Kelola sesi presensi <span aria-hidden="true">↗</span>
+                        </a>
 
+                        <a href="{{ route('pengurus.laporan-presensi') }}"
+                           class="banner-button">
+                            Lihat laporan <span aria-hidden="true">↗</span>
+                        </a>
+                    </div>
+                </div>
 
-            <div class="st-role">
+                <div class="brand-mark" aria-label="SmartTren">
+                    <div class="brand-symbol"><span>ST</span></div>
+                    <div class="brand-name">SMARTTREN</div>
+                    <div class="brand-caption">Student Attendance Management</div>
+                </div>
+            </section>
 
-                <span class="st-role-dot"></span>
+            {{-- STATISTIC CARDS --}}
+            <section class="stats-grid">
+                <article class="stat-card" style="--accent:#07966a;--icon-bg:#e4f6ed">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Sesi</span>
+                        <span class="stat-icon">SS</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-bottom">
+                        <span class="stat-note">Data sesi belum dihubungkan</span>
+                        <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                           class="stat-link">Lihat detail ↗</a>
+                    </div>
+                </article>
 
-                Pengurus SmartTren
+                <article class="stat-card" style="--accent:#5887ee;--icon-bg:#eaf0ff">
+                    <div class="stat-top">
+                        <span class="stat-label">Kehadiran Hari Ini</span>
+                        <span class="stat-icon">KH</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-bottom">
+                        <span class="stat-note">Data presensi belum dihubungkan</span>
+                        <a href="{{ route('pengurus.laporan-presensi') }}"
+                           class="stat-link">Lihat detail ↗</a>
+                    </div>
+                </article>
 
-            </div>
+                <article class="stat-card" style="--accent:#9863df;--icon-bg:#f1e9ff">
+                    <div class="stat-top">
+                        <span class="stat-label">Sesi Aktif</span>
+                        <span class="stat-icon">SA</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-bottom">
+                        <span class="stat-note">Data sesi belum dihubungkan</span>
+                        <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                           class="stat-link">Lihat detail ↗</a>
+                    </div>
+                </article>
 
-        </div>
+                <article class="stat-card" style="--accent:#e3a13c;--icon-bg:#fff2df">
+                    <div class="stat-top">
+                        <span class="stat-label">Pengajuan Izin</span>
+                        <span class="stat-icon">IZ</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-bottom">
+                        <span class="stat-note">Data pengajuan belum dihubungkan</span>
+                        <a href="{{ route('pengurus.pengajuan-izin.index') }}"
+                           class="stat-link">Lihat detail ↗</a>
+                    </div>
+                </article>
+            </section>
 
-    </x-slot>
+            {{-- QUICK ACCESS AND SUMMARY --}}
+            <section class="content-grid">
 
-
-
-    {{-- =========================================================
-       DASHBOARD
-    ========================================================= --}}
-
-    <div class="st-dashboard">
-
-        <div class="st-container">
-
-
-            {{-- =================================================
-               HERO
-            ================================================= --}}
-
-            <section class="st-hero">
-
-                <div class="st-hero-content">
-
-                    <div class="st-hero-label">
-                        Sistem Presensi SmartTren
+                <article class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 class="panel-title">Akses cepat</h2>
+                            <p class="panel-description">
+                                Fitur utama untuk operasional presensi.
+                            </p>
+                        </div>
+                        <span class="panel-tag">QUICK ACCESS</span>
                     </div>
 
-                    <h1 class="st-hero-title">
-                        Selamat Datang, Pengurus 👋
-                    </h1>
+                    <div class="quick-list">
+                        <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                           class="quick-link">
+                            <span class="quick-number">01</span>
+                            <span>
+                                <span class="quick-title">Sesi Presensi</span>
+                                <span class="quick-description" style="display:block">
+                                    Buat dan kelola sesi kegiatan.
+                                </span>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </a>
 
-                    <p class="st-hero-text">
+                        <a href="{{ route('pengurus.pengajuan-izin.index') }}"
+                           class="quick-link">
+                            <span class="quick-number">02</span>
+                            <span>
+                                <span class="quick-title">Pengajuan Izin / Sakit</span>
+                                <span class="quick-description" style="display:block">
+                                    Periksa pengajuan izin mahasantri.
+                                </span>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </a>
 
-                        Kelola sesi presensi, scan QR Card Mahasantri,
-                        periksa kehadiran, dan pantau rekap presensi
-                        dengan lebih cepat dan mudah.
+                        <a href="{{ route('pengurus.laporan-presensi') }}"
+                           class="quick-link">
+                            <span class="quick-number">03</span>
+                            <span>
+                                <span class="quick-title">Laporan Presensi</span>
+                                <span class="quick-description" style="display:block">
+                                    Lihat rekap presensi kegiatan.
+                                </span>
+                            </span>
+                            <span class="quick-arrow">↗</span>
+                        </a>
+                    </div>
+                </article>
 
-                    </p>
-
-
-                    <a
-                        href="{{ route('pengurus.sesi-presensi.index') }}"
-                        class="st-primary-button"
-                    >
-
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 4v16m8-8H4"
-                            />
-
-                        </svg>
-
-                        Kelola Sesi Presensi
-
-                    </a>
-
-                </div>
-
-            </section>
-
-
-
-            {{-- =================================================
-               RINGKASAN
-            ================================================= --}}
-
-            <section class="st-section">
-
-                <div class="st-section-header">
-
-                    <h3 class="st-section-title">
-                        Ringkasan
-                    </h3>
-
-                    <p class="st-section-text">
-                        Akses cepat ke dua fitur utama pengurus.
-                    </p>
-
-                </div>
-
-
-                <div class="st-stat-grid">
-
-
-                    {{-- KELOLA SESI --}}
-
-                    <a
-                        href="{{ route('pengurus.sesi-presensi.index') }}"
-                        class="st-stat"
-                    >
-
+                <article class="panel">
+                    <div class="panel-header">
                         <div>
-
-                            <p class="st-stat-label">
-                                Presensi
+                            <h2 class="panel-title">Informasi sistem</h2>
+                            <p class="panel-description">
+                                Ringkasan akses dan aktivitas pengurus.
                             </p>
+                        </div>
+                        <span class="panel-tag">OVERVIEW</span>
+                    </div>
 
-                            <p class="st-stat-value">
-                                Kelola Sesi
-                            </p>
-
+                    <div class="quick-list">
+                        <div class="quick-link">
+                            <span class="quick-number">✓</span>
+                            <span>
+                                <span class="quick-title">Sistem presensi</span>
+                                <span class="quick-description" style="display:block">
+                                    Halaman pengurus siap digunakan.
+                                </span>
+                            </span>
                         </div>
 
-
-                        <div class="st-stat-icon st-green">
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4
-                                       m6 2a9 9 0 11-18 0
-                                       9 9 0 0118 0z"
-                                />
-
-                            </svg>
-
+                        <div class="quick-link">
+                            <span class="quick-number">QR</span>
+                            <span>
+                                <span class="quick-title">Presensi QR</span>
+                                <span class="quick-description" style="display:block">
+                                    Kelola sesi melalui menu sesi presensi.
+                                </span>
+                            </span>
                         </div>
 
-                    </a>
-
-
-
-                    {{-- LAPORAN KEGIATAN --}}
-
-                    <a
-                        href="{{ route('pengurus.laporan-kegiatan.index') }}"
-                        class="st-stat"
-                    >
-
-                        <div>
-
-                            <p class="st-stat-label">
-                                Laporan
-                            </p>
-
-                            <p class="st-stat-value">
-                                Laporan Kegiatan
-                            </p>
-
+                        <div class="quick-link">
+                            <span class="quick-number">PDF</span>
+                            <span>
+                                <span class="quick-title">Rekap laporan</span>
+                                <span class="quick-description" style="display:block">
+                                    Buka halaman laporan untuk melihat rekap.
+                                </span>
+                            </span>
+                            <a href="{{ route('pengurus.laporan-presensi') }}"
+                               class="text-link">Buka ↗</a>
                         </div>
-
-
-                        <div class="st-stat-icon st-red">
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M7 21h10a2 2 0 002-2V7.828
-                                       a2 2 0 00-.586-1.414l-3.828-3.828
-                                       A2 2 0 0013.172 2H7
-                                       a2 2 0 00-2 2v15a2 2 0 002 2z"
-                                />
-
-                            </svg>
-
-                        </div>
-
-                    </a>
-
-
-                </div>
-
+                    </div>
+                </article>
             </section>
 
-
-
-            {{-- =================================================
-               MENU UTAMA
-            ================================================= --}}
-
-            <section class="st-section">
-
-                <div class="st-section-header">
-
-                    <h3 class="st-section-title">
-                        Menu Utama
-                    </h3>
-
-                    <p class="st-section-text">
-                        Pilih fitur utama yang ingin digunakan.
-                    </p>
-
-                </div>
-
-
-                <div class="st-menu-grid">
-
-
-                    {{-- KELOLA SESI PRESENSI --}}
-
-                    <a
-                        href="{{ route('pengurus.sesi-presensi.index') }}"
-                        class="st-menu-card"
-                    >
-
-                        <div class="st-menu-icon green">
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4
-                                       m6 2a9 9 0 11-18 0
-                                       9 9 0 0118 0z"
-                                />
-
-                            </svg>
-
-                        </div>
-
-
-                        <h4 class="st-menu-title">
-                            Kelola Sesi Presensi
-                        </h4>
-
-
-                        <p class="st-menu-description">
-
-                            Buat dan kelola sesi presensi berdasarkan
-                            kegiatan, tanggal, dan waktu.
-
-                            Dari sini pengurus dapat membuka
-                            scanner QR dan melihat rekap satu sesi.
-
+            {{-- ATTENDANCE SESSIONS --}}
+            <section class="panel table-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Sesi Presensi Terbaru</h2>
+                        <p class="panel-description">
+                            Pantau jadwal dan status kegiatan pesantren.
                         </p>
+                    </div>
 
-
-                        <span class="st-menu-link">
-                            Buka Sesi Presensi →
-                        </span>
-
+                    <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                       class="text-link">
+                        Lihat semua →
                     </a>
-
-
-
-                    {{-- LAPORAN KEGIATAN --}}
-
-                    <a
-                        href="{{ route('pengurus.laporan-kegiatan.index') }}"
-                        class="st-menu-card"
-                    >
-
-                        <div class="st-menu-icon red">
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M7 21h10a2 2 0 002-2V7.828
-                                       a2 2 0 00-.586-1.414l-3.828-3.828
-                                       A2 2 0 0013.172 2H7
-                                       a2 2 0 00-2 2v15a2 2 0 002 2z"
-                                />
-
-                            </svg>
-
-                        </div>
-
-
-                        <h4 class="st-menu-title">
-                            Laporan Kegiatan
-                        </h4>
-
-
-                        <p class="st-menu-description">
-
-                            Pilih kegiatan untuk melihat laporan
-                            presensi.
-
-                            Gunakan filter harian, mingguan,
-                            bulanan atau rentang tanggal,
-                            lalu cetak laporan ke PDF.
-
-                        </p>
-
-
-                        <span class="st-menu-link red">
-                            Buka Laporan →
-                        </span>
-
-                    </a>
-
-
                 </div>
 
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Kegiatan</th>
+                                <th>Tanggal</th>
+                                <th>Waktu</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="empty-state">
+                                    Data sesi belum dihubungkan ke ringkasan dashboard.
+                                    <br>
+                                    <a href="{{ route('pengurus.sesi-presensi.index') }}"
+                                       class="text-link">
+                                        Buka halaman Sesi Presensi →
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
+            <footer class="footer-note">
+                SmartTrenMJ · Sistem Informasi Presensi Pesantren
+            </footer>
 
-
-            {{-- =================================================
-               INFO / ALUR PRESENSI
-            ================================================= --}}
-
-            <section class="st-info">
-
-                <div class="st-info-icon">
-
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01
-                               M12 20a8 8 0 100-16
-                               8 8 0 000 16z"
-                        />
-
-                    </svg>
-
-                </div>
-
-
-                <div>
-
-                    <h4 class="st-info-title">
-                        Alur Presensi
-                    </h4>
-
-
-                    <p class="st-info-text">
-
-                        Kelola kegiatan → buat sesi presensi →
-                        buka sesi aktif → scan QR Card Mahasantri →
-                        periksa rekap sesi → buka Laporan Kegiatan
-                        untuk melihat filter harian, mingguan,
-                        bulanan, atau rentang tanggal dan cetak PDF.
-
-                    </p>
-
-                </div>
-
-            </section>
-
-
-        </div>
-
+        </main>
     </div>
-
 </x-app-layout>

@@ -1465,35 +1465,42 @@
 
                                     {{-- STATUS --}}
 
-                                    <td>
+                                   
+<td>
 
-                                        @if($item->status === 'hadir')
+    @if ($item->status === 'hadir')
 
-                                            <span class="status-badge status-hadir">
-                                                Hadir
-                                            </span>
+        <span class="status-badge status-hadir">
+            Hadir
+        </span>
 
-                                        @elseif($item->status === 'izin')
+    @elseif ($item->status === 'izin')
 
-                                            <span class="status-badge status-izin">
-                                                Izin
-                                            </span>
+        <span class="status-badge status-izin">
+            Izin
+        </span>
 
-                                        @elseif($item->status === 'sakit')
+    @elseif ($item->status === 'sakit')
 
-                                            <span class="status-badge status-sakit">
-                                                Sakit
-                                            </span>
+        <span class="status-badge status-sakit">
+            Sakit
+        </span>
 
-                                        @else
+    @elseif ($item->status === 'belum_presensi')
 
-                                            <span class="status-badge status-alpa">
-                                                Alpa
-                                            </span>
+        <span class="status-badge" style="background-color: #e5e7eb; color: #374151;">
+            Belum Presensi
+        </span>
 
-                                        @endif
+    @elseif ($item->status === 'alpa')
 
-                                    </td>
+        <span class="status-badge status-alpa">
+            Alpa
+        </span>
+
+    @endif
+
+</td>
 
 
 
@@ -1519,22 +1526,65 @@
 
                                     {{-- AKSI --}}
 
-                                    <td>
+                                    {{-- AKSI --}}
+<td>
+    <form
+        method="POST"
+        action="{{ route('pengurus.presensi.update', $item->id) }}"
+        class="space-y-2"
+    >
+        @csrf
+        @method('PATCH')
 
-                                        <form
-                                            method="POST"
-                                            action="{{ route(
-                                                'pengurus.presensi.update',
-                                                $item
-                                            ) }}"
-                                            class="update-form"
-                                        >
+        <select
+            name="status"
+            class="update-select"
+            required
+        >
+            @if ($item->status === 'belum_presensi')
+                <option value="" selected disabled>
+                    Pilih status
+                </option>
+            @endif
 
-                                            @csrf
+            <option value="hadir"
+                @selected($item->status === 'hadir')>
+                Hadir
+            </option>
 
-                                            @method('PATCH')
+            <option value="izin"
+                @selected($item->status === 'izin')>
+                Izin
+            </option>
 
+            <option value="sakit"
+                @selected($item->status === 'sakit')>
+                Sakit
+            </option>
 
+            <option value="alpa"
+                @selected($item->status === 'alpa')>
+                Alpa
+            </option>
+        </select>
+
+        <input
+            type="text"
+            name="keterangan"
+            value="{{ $item->keterangan }}"
+            placeholder="Keterangan (opsional)"
+            maxlength="1000"
+            class="update-input"
+        >
+
+        <button
+            type="submit"
+            class="save-button"
+        >
+            Simpan
+        </button>
+    </form>
+</td>
                                             {{-- STATUS --}}
 
                                             <select

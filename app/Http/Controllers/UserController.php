@@ -12,15 +12,39 @@ class UserController extends Controller
     /**
      * Menampilkan daftar seluruh pengguna.
      */
-    public function index(): View
-    {
-        $users = User::orderBy('name')->get();
+    public function index()
+{
+    $users = User::latest()
+        ->paginate(15);
 
-        return view(
-            'admin.users.index',
-            compact('users')
-        );
-    }
+    $totalUser = User::count();
+
+    $totalAdmin = User::where(
+        'role',
+        'admin'
+    )->count();
+
+    $totalPengurus = User::where(
+        'role',
+        'pengurus'
+    )->count();
+
+    $totalMahasantri = User::where(
+        'role',
+        'mahasantri'
+    )->count();
+
+    return view(
+        'admin.users.index',
+        compact(
+            'users',
+            'totalUser',
+            'totalAdmin',
+            'totalPengurus',
+            'totalMahasantri'
+        )
+    );
+}
 
     /**
      * Menampilkan form tambah pengguna.
