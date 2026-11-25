@@ -33,10 +33,7 @@ class SesiPresensi extends Model
      */
     public function kegiatan(): BelongsTo
     {
-        return $this->belongsTo(
-            Kegiatan::class,
-            'kegiatan_id'
-        );
+        return $this->belongsTo(Kegiatan::class, 'kegiatan_id');
     }
 
     /**
@@ -44,9 +41,6 @@ class SesiPresensi extends Model
      */
     public function presensi(): HasMany
     {
-        return $this->hasMany(
-            Presensi::class,
-            'sesi_presensi_id'
-        );
+        return $this->hasMany(Presensi::class, 'sesi_presensi_id');
     }
 }

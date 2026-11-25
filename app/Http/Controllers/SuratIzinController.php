@@ -3,27 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SuratIzin;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SuratIzin;
 
 class SuratIzinController extends Controller
 {
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'alasan' => 'required|string',
+            'jenis_izin' => 'required|in:Sakit,Izin',
+            'tanggal'    => 'required|date',
+            'keterangan' => 'required|string',
+            'bukti_foto' => 'required|image|max:2048',
         ]);
+
+        $path = $request->file('bukti_foto')->store('bukti-izin', 'public');
 
         SuratIzin::create([
-            'user_id' => Auth::id(), // Menyimpan ID mahasantri yang sedang login
-            'tanggal_mulai' => $request->tanggal_mulai,
-            'tanggal_selesai' => $request->tanggal_selesai,
-            'alasan' => $request->alasan,
-            'status' => 'pending',
+            'user_id'    => Auth::id(),
+            'jenis_izin' => $request->jenis_izin,
+            'tanggal'    => $request->tanggal,
+            'keterangan' => $request->keterangan,
+            'bukti_foto' => $path,
+            'status'     => 'pending',
         ]);
 
-        return back()->with('success', 'Pengajuan surat izin berhasil dikirim ke pengurus!');
+        return back()->with('success', 'Pengajuan surat izin berhasil dikirim dan otomatis masuk ke rekap kehadiran!');
     }
 }

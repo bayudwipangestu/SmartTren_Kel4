@@ -1,0 +1,30 @@
+{
+  "consoleErrors": [
+    {
+      "url": "http://127.0.0.1:8011/pengurus/dashboard",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "url": "http://127.0.0.1:8011/pengurus/presensi/1/rekap",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "url": "http://127.0.0.1:8011/pengurus/presensi/1/scanner",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "url": "http://127.0.0.1:8011/admin/dashboard",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    }
+  ],
+  "httpErrors": [
+    {
+      "url": "http://127.0.0.1:8011/pengurus/presensi/1/rekap",
+      "status": 500
+    },
+    {
+      "url": "http://127.0.0.1:8011/pengurus/presensi/1/scanner",
+      "status": 500
+    }
+  ]
+}

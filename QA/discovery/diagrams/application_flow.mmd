@@ -1,0 +1,20 @@
+flowchart TD
+    A["Pengunjung / Guest (/)"] --> B["Login (/login) / Register (/register)"]
+    B --> C{"Cek Role User (/dashboard)"}
+    C -->|admin| D["Dashboard Admin (/admin/dashboard)"]
+    C -->|pengurus| E["Dashboard Pengurus (/pengurus/dashboard)"]
+    C -->|mahasantri| F["Dashboard Mahasantri (/mahasantri/dashboard)"]
+
+    D --> D1["Manajemen User (/admin/users)"]
+    D --> D2["Manajemen Mahasantri & QR (/admin/mahasantri)"]
+    D --> D3["Manajemen Kegiatan (/admin/kegiatan)"]
+
+    E --> E1["Sesi Presensi (/pengurus/sesi-presensi)"]
+    E1 --> E2["Rekap Sesi (/pengurus/presensi/{id}/rekap)"]
+    E -.->|"HTTP 500: PresensiController Missing"| E3["Daftar Presensi / Scanner QR / Laporan Kegiatan"]
+
+    F --> F1["Tampil QR Presensi (/mahasantri/presensi)"]
+    F --> F2["Riwayat Presensi (/mahasantri/riwayat-presensi)"]
+    F --> F3["Rekap Kehadiran (/mahasantri/rekap-presensi)"]
+    F --> F4["Form Pengajuan Izin (POST /izin)"]
+    F -.->|"HTTP 500: View Missing"| F5["Data Akun (/mahasantri/akun)"]

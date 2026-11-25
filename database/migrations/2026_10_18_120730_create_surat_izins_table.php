@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('surat_izins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('tanggal_mulai');
-            $table->date('tanggal_selesai');
-            $table->text('alasan');
+            $table->enum('jenis_izin', ['Sakit', 'Izin']);
+            $table->date('tanggal');
+            $table->text('keterangan');
+            $table->string('bukti_foto'); // Menyimpan nama/path file foto
             $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

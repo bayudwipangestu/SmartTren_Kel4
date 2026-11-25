@@ -1,0 +1,31 @@
+{
+  "projectProfile": {
+    "projectName": "SmartTren (Sistem Informasi & Presensi Pesantren Mahasiswa)",
+    "applicationType": "Custom Web Application / Pesantren Attendance & Activity Management System",
+    "technologyStack": {
+      "backend": "Laravel 12 (PHP 8.x)",
+      "frontend": "Blade Templates, Tailwind CSS, Alpine.js, Vite",
+      "database": "MySQL (smarttren)",
+      "auth": "Laravel Breeze + Custom Role Middleware (role:admin|pengurus|mahasantri) + Spatie Permission (installed)"
+    },
+    "environment": "Localhost (http://127.0.0.1:8000)",
+    "roles": [
+      { "roleId": "ROLE-ADM", "name": "admin", "purpose": "Pengelolaan master data user, mahasantri (+QR), dan kegiatan" },
+      { "roleId": "ROLE-PNG", "name": "pengurus", "purpose": "Pengelolaan sesi presensi, rekap sesi, scanner QR, dan laporan kegiatan" },
+      { "roleId": "ROLE-MHS", "name": "mahasantri", "purpose": "Menampilkan QR Code presensi, melihat riwayat & rekap kehadiran, mengajukan surat izin" }
+    ]
+  },
+  "modules": [
+    { "moduleId": "MOD-PUB", "name": "Public & Landing" },
+    { "moduleId": "MOD-AUTH", "name": "Authentication & Authorization" },
+    { "moduleId": "MOD-ADM", "name": "Admin Management (User, Mahasantri, Kegiatan)" },
+    { "moduleId": "MOD-PNG", "name": "Pengurus Presensi & Pelaporan" },
+    { "moduleId": "MOD-MHS", "name": "Portal Mahasantri (QR, Riwayat, Rekap, Izin, Akun)" },
+    { "moduleId": "MOD-UI", "name": "UI & Responsive Layout" }
+  ],
+  "discoveryLimitations": [
+    "Tabel mahasantri saat pengujian awal memiliki 0 record sehingga skenario scan QR end-to-end belum dapat dieksekusi penuh.",
+    "Beberapa route pengurus merujuk ke App\\Http\\Controllers\\PresensiController yang belum ada.",
+    "View mahasantri.akun.index belum tersedia."
+  ]
+}

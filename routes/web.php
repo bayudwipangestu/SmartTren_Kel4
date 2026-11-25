@@ -4,11 +4,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\MahasantriController;
-use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SesiPresensiController;
 use App\Http\Controllers\SuratIzinController; // <-- [BARU] Menambahkan controller Surat Izin
+use App\Http\Controllers\Mahasantri\AkunController as MahasantriAkunController;
 use App\Http\Controllers\Mahasantri\PresensiController as MahasantriPresensiController;
+use App\Http\Controllers\Pengurus\PresensiController as PengurusPresensiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -202,7 +203,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/laporan-kegiatan', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'laporanKegiatanIndex'
         ])->name('laporan-kegiatan.index');
 
@@ -214,7 +215,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/laporan-kegiatan/{kegiatan}', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'laporanKegiatan'
         ])->name('laporan-kegiatan.show');
 
@@ -226,7 +227,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/laporan-kegiatan/{kegiatan}/pdf', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'laporanKegiatanPdf'
         ])->name('laporan-kegiatan.pdf');
 
@@ -242,7 +243,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/laporan-presensi', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'laporan'
         ])->name('laporan-presensi');
 
@@ -254,7 +255,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/laporan-presensi/pdf', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'laporanPdf'
         ])->name('laporan-presensi.pdf');
 
@@ -266,7 +267,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/presensi', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'index'
         ])->name('presensi.index');
 
@@ -281,7 +282,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/presensi/{sesiPresensi}/scanner', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'scanner'
         ])->name('presensi.scanner');
 
@@ -293,7 +294,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::post('/presensi/{sesiPresensi}/scan', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'scan'
         ])->name('presensi.scan');
 
@@ -305,7 +306,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::get('/presensi/{sesiPresensi}/rekap', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'rekap'
         ])->name('presensi.rekap');
 
@@ -324,7 +325,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::patch('/presensi/data/{presensi}', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'update'
         ])->name('presensi.update');
 
@@ -340,7 +341,7 @@ Route::middleware(['auth', 'role:pengurus'])
         */
 
         Route::post('/presensi/{sesiPresensi}/generate-alpa', [
-            PresensiController::class,
+            PengurusPresensiController::class,
             'generateAlpa'
         ])->name('presensi.generate-alpa');
 
@@ -400,7 +401,19 @@ Route::middleware(['auth', 'role:mahasantri'])
 
         /*
         |--------------------------------------------------------------------------
-        | [BARU] PENGAJUAN SURAT IZIN MAHASANTRI
+        | REKAP PRESENSI MAHASANTRI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/mahasantri/rekap-presensi', [
+            MahasantriPresensiController::class,
+            'rekap'
+        ])->name('mahasantri.presensi.rekap');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENGAJUAN SURAT IZIN MAHASANTRI
         |--------------------------------------------------------------------------
         */
 
@@ -408,6 +421,23 @@ Route::middleware(['auth', 'role:mahasantri'])
             SuratIzinController::class,
             'store'
         ])->name('izin.store');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA AKUN MAHASANTRI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/mahasantri/akun', [
+            MahasantriAkunController::class,
+            'index'
+        ])->name('mahasantri.akun');
+
+        Route::put('/mahasantri/akun', [
+            MahasantriAkunController::class,
+            'update'
+        ])->name('mahasantri.akun.update');
 
     });
 

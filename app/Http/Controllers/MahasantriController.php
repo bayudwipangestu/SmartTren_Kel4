@@ -14,13 +14,39 @@ class MahasantriController extends Controller
     /**
      * Menampilkan daftar Mahasantri.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mahasantri = Mahasantri::with('user')
-            ->latest()
-            ->paginate(10);
+        $query = Mahasantri::with('user');
 
-        return view('admin.mahasantri.index', compact('mahasantri'));
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nim', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('qr_code', 'like', "%{$search}%")
+                  ->orWhere('kamar', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($u) use ($search) {
+                      $u->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $mahasantri = $query->latest()->paginate(10)->withQueryString();
+        $totalMahasantri = Mahasantri::count();
+        $totalAktif = Mahasantri::where('status', 'aktif')->count();
+        $totalNonaktif = Mahasantri::where('status', 'nonaktif')->count();
+
+        return view('admin.mahasantri.index', compact(
+            'mahasantri',
+            'totalMahasantri',
+            'totalAktif',
+            'totalNonaktif'
+        ));
     }
 
     /**

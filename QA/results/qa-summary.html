@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>SmartTren QA Summary Report</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 32px; background: #f8fafc; color: #1e293b; }
+h1 { color: #087443; }
+.cards { display: flex; gap: 16px; margin-bottom: 24px; }
+.card { background: #fff; padding: 16px 24px; border-radius: 10px; border: 1px solid #e2e8f0; min-width: 150px; }
+.card h3 { margin: 0; font-size: 13px; color: #64748b; }
+.card p { margin: 6px 0 0; font-size: 24px; font-weight: bold; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+th { background: #087443; color: #fff; padding: 10px; text-align: left; font-size: 13px; }
+td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 13px; vertical-align: top; }
+</style>
+</head>
+<body>
+<h1>SmartTren — QA Automation Summary</h1>
+<div class="cards">
+  <div class="card"><h3>Total Test Case</h3><p>27</p></div>
+  <div class="card"><h3>PASS</h3><p style="color:#16a34a">25</p></div>
+  <div class="card"><h3>FAIL</h3><p style="color:#dc2626">2</p></div>
+  <div class="card"><h3>Pass Rate</h3><p>92.6%</p></div>
+  <div class="card"><h3>Bugs Found</h3><p style="color:#d97706">8</p></div>
+</div>
+<table>
+  <thead><tr><th>TC ID</th><th>Role</th><th>Halaman</th><th>Objektif</th><th>Hasil Aktual</th><th>Status</th></tr></thead>
+  <tbody><tr><td>TC-001</td><td>Public</td><td>Welcome Page (/)</td><td>Memverifikasi halaman utama aplikasi dapat diakses dan dirender dengan benar.</td><td>HTTP 200, judul halaman "SmartTren | Login".</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-002</td><td>Public</td><td>Login (/login)</td><td>Memverifikasi form login tersedia dengan field email dan password.</td><td>HTTP 200, email input: 1, password input: 1.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-003</td><td>Public</td><td>Login (/login)</td><td>Memverifikasi sistem menolak login dengan kredensial tidak valid.</td><td>URL saat ini: http://127.0.0.1:8011/login, pesan error tampil: true.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-004</td><td>Public (Unauthenticated)</td><td>Admin Dashboard (/admin/dashboard)</td><td>Memverifikasi halaman admin tidak dapat diakses tanpa login.</td><td>Status: 200, diarahkan ke URL: http://127.0.0.1:8011/login.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-005</td><td>Public (Unauthenticated)</td><td>Mahasantri Dashboard (/mahasantri/dashboard)</td><td>[Retest BUG-001] Memverifikasi halaman mahasantri tidak dapat diakses tanpa login.</td><td>Status: 200, diarahkan ke URL: http://127.0.0.1:8011/login.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-006</td><td>Admin</td><td>Dashboard Admin (/admin/dashboard)</td><td>Memverifikasi login Admin berhasil dan diarahkan ke Dashboard Admin.</td><td>URL: http://127.0.0.1:8011/admin/dashboard, teks "Dashboard Admin" tampil: true.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-007</td><td>Admin</td><td>Manajemen User (/admin/users)</td><td>Memverifikasi halaman daftar pengguna tampil untuk Admin.</td><td>HTTP 200, menampilkan user Admin SmartTren: true.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-008</td><td>Admin</td><td>Tambah User (/admin/users/create)</td><td>Memverifikasi form tambah user tampil dengan field nama, email, password, role.</td><td>HTTP 200, URL: http://127.0.0.1:8011/admin/users/create.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-009</td><td>Admin</td><td>Data Mahasantri (/admin/mahasantri)</td><td>[Retest BUG-006] Memverifikasi halaman daftar mahasantri dapat diakses oleh Admin.</td><td>HTTP 200, URL: http://127.0.0.1:8011/admin/mahasantri.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-010</td><td>Admin</td><td>Tambah Mahasantri (/admin/mahasantri/create)</td><td>Memverifikasi form tambah mahasantri tampil.</td><td>HTTP 200, URL: http://127.0.0.1:8011/admin/mahasantri/create.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-011</td><td>Admin</td><td>Data Kegiatan (/admin/kegiatan)</td><td>Memverifikasi halaman daftar kegiatan menampilkan data seeder (Sholat Subuh, dll).</td><td>HTTP 200, menampilkan "Sholat Subuh": true.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-012</td><td>Admin</td><td>Dashboard Pengurus (/pengurus/dashboard)</td><td>Memverifikasi Admin ditolak saat mengakses halaman khusus Pengurus.</td><td>HTTP 403.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-013</td><td>Pengurus</td><td>Dashboard Pengurus (/pengurus/dashboard)</td><td>Memverifikasi login Pengurus berhasil dan diarahkan ke Dashboard Pengurus.</td><td>URL: http://127.0.0.1:8011/pengurus/dashboard.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-014</td><td>Pengurus</td><td>Sesi Presensi (/pengurus/sesi-presensi)</td><td>Memverifikasi halaman daftar sesi presensi tampil.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-015</td><td>Pengurus</td><td>Buat Sesi Presensi (/pengurus/sesi-presensi/create)</td><td>Memverifikasi form pembuatan sesi presensi dapat dibuka.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-016</td><td>Pengurus</td><td>Rekap Sesi Presensi (/pengurus/presensi/1/rekap)</td><td>[Retest BUG-007] Memverifikasi halaman rekap presensi per sesi dapat diakses.</td><td>HTTP 500 ViewException: Undefined variable $sesiPresensi pada pengurus.presensi.rekap.</td><td><span style='background:#dc2626;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>FAIL</span></td></tr>
+<tr><td>TC-017</td><td>Pengurus</td><td>Daftar Presensi (/pengurus/presensi)</td><td>[Retest BUG-002] Memverifikasi halaman daftar presensi pengurus dapat diakses.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-018</td><td>Pengurus</td><td>Laporan Kegiatan (/pengurus/laporan-kegiatan)</td><td>[Retest BUG-002] Memverifikasi halaman laporan kegiatan dapat diakses oleh Pengurus.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-026</td><td>Pengurus</td><td>Laporan Presensi (/pengurus/laporan-presensi)</td><td>Memverifikasi halaman laporan presensi dengan filter periode tampil.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-027</td><td>Pengurus</td><td>Scanner QR (/pengurus/presensi/1/scanner)</td><td>Memverifikasi halaman scanner QR sesi presensi dapat dibuka.</td><td>HTTP 500 ViewException: Undefined variable $sesiPresensi pada pengurus.presensi.scanner.</td><td><span style='background:#dc2626;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>FAIL</span></td></tr>
+<tr><td>TC-019</td><td>Pengurus</td><td>Dashboard Admin (/admin/dashboard)</td><td>Memverifikasi Pengurus ditolak saat mengakses halaman khusus Admin.</td><td>HTTP 403.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-020</td><td>Mahasantri</td><td>Dashboard Mahasantri (/mahasantri/dashboard)</td><td>Memverifikasi login Mahasantri berhasil dan diarahkan ke Dashboard Mahasantri.</td><td>URL: http://127.0.0.1:8011/mahasantri/dashboard.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-021</td><td>Mahasantri</td><td>Presensi QR (/mahasantri/presensi)</td><td>Memverifikasi halaman QR Code presensi mahasantri dapat dibuka.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-022</td><td>Mahasantri</td><td>Riwayat Presensi (/mahasantri/riwayat-presensi)</td><td>Memverifikasi halaman riwayat presensi mahasantri dapat diakses.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-023</td><td>Mahasantri</td><td>Rekap Kehadiran (/mahasantri/rekap-presensi)</td><td>Memverifikasi halaman rekap kehadiran dan filter dapat diakses.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-024</td><td>Mahasantri</td><td>Data Akun (/mahasantri/akun)</td><td>[Retest BUG-003] Memverifikasi halaman Data Akun pada menu sidebar Mahasantri dapat diakses.</td><td>HTTP 200.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+<tr><td>TC-025</td><td>Mahasantri</td><td>Dashboard Mahasantri (Viewport Mobile 390x844)</td><td>Memverifikasi layout responsif pada layar mobile 390x844.</td><td>Horizontal overflow terdeteksi: false.</td><td><span style='background:#16a34a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:bold;font-size:12px'>PASS</span></td></tr>
+</tbody>
+</table>
+</body>
+</html>

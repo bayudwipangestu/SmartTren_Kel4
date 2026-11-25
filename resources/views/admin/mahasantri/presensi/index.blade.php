@@ -2,18 +2,10 @@
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Presensi Mahasantri - SmartTren</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mahasantri - SmartTren</title>
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -48,19 +40,16 @@
         }
 
         .header {
-            background: linear-gradient(
-                135deg,
-                #166534,
-                #15803d
-            );
-
+            background: linear-gradient(135deg, #166534, #15803d);
             color: white;
-
             padding: 30px;
-
             border-radius: 18px;
-
             margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .header h1 {
@@ -73,85 +62,44 @@
             opacity: .9;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 25px;
+        .btn-add {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #ffffff;
+            color: #166534;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
         }
 
         .card {
             background: white;
             border-radius: 18px;
             padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,.07);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .07);
+            overflow-x: auto;
         }
 
-        .card h2 {
-            margin-top: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f0fdf4;
             color: #166534;
-            font-size: 20px;
-        }
-
-        .qr-card {
-            text-align: center;
-        }
-
-        .qr-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #f9fafb;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
-
-        .qr-code {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px;
-            border-radius: 8px;
             font-weight: bold;
-            word-break: break-all;
-        }
-
-        .info {
-            padding: 15px;
-            background: #f9fafb;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-        .label {
-            display: block;
-            font-size: 12px;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-
-        .value {
-            font-weight: bold;
-            color: #111827;
-        }
-
-        .session {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
-        }
-
-        .session h3 {
-            margin: 0;
-            color: #111827;
-            font-size: 18px;
         }
 
         .badge {
             display: inline-block;
-            margin-top: 10px;
-            padding: 5px 10px;
+            padding: 4px 10px;
             background: #dcfce7;
             color: #166534;
             border-radius: 20px;
@@ -166,231 +114,61 @@
             background: #f9fafb;
             border-radius: 12px;
         }
-
-        @media(max-width: 800px) {
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
     </style>
-
 </head>
 
 <body>
+    @php
+        $listMahasantri = $mahasantris ?? ($mahasantri ?? ($data ?? collect()));
+    @endphp
 
-<div class="container">
+    <div class="container">
+        <a href="{{ route('admin.dashboard') }}" class="back">← Kembali ke Dashboard</a>
 
-    {{-- KEMBALI KE DASHBOARD --}}
-
-    <a
-        href="{{ route('mahasantri.dashboard') }}"
-        class="back"
-    >
-        ← Kembali ke Dashboard
-    </a>
-
-
-    {{-- HEADER --}}
-
-    <div class="header">
-
-        <h1>
-            Presensi Kegiatan
-        </h1>
-
-        <p>
-            Tunjukkan QR Code Anda kepada Pengurus
-            untuk melakukan presensi.
-        </p>
-
-    </div>
-
-
-    <div class="grid">
-
-
-        {{-- KOLOM KIRI --}}
-
-        <div>
-
-
-            {{-- QR CODE --}}
-
-            <div class="card qr-card">
-
-                <h2>
-                    QR Code Presensi
-                </h2>
-
-                <div class="qr-box">
-
-                    {!! QrCode::size(250)
-                        ->margin(1)
-                        ->generate($mahasantri->qr_code) !!}
-
-                </div>
-
-                <div class="qr-code">
-
-                    {{ $mahasantri->qr_code }}
-
-                </div>
-
-                <p style="color:#6b7280;">
-
-                    Tunjukkan QR Code ini
-                    kepada Pengurus saat presensi.
-
-                </p>
-
+        <div class="header">
+            <div>
+                <h1>Data Mahasantri</h1>
+                <p>Kelola data mahasantri, identitas, dan informasi akun pada sistem SmartTren.</p>
             </div>
-
-
-            {{-- DATA MAHASANTRI --}}
-
-            <div class="card">
-
-                <h2>
-                    Data Mahasantri
-                </h2>
-
-
-                <div class="info">
-
-                    <span class="label">
-                        Nama
-                    </span>
-
-                    <span class="value">
-
-                        {{ $mahasantri->user->name ?? '-' }}
-
-                    </span>
-
-                </div>
-
-
-                <div class="info">
-
-                    <span class="label">
-                        NIM
-                    </span>
-
-                    <span class="value">
-
-                        {{ $mahasantri->nim }}
-
-                    </span>
-
-                </div>
-
-
-                <div class="info">
-
-                    <span class="label">
-                        Email
-                    </span>
-
-                    <span class="value">
-
-                        {{ $mahasantri->user->email ?? '-' }}
-
-                    </span>
-
-                </div>
-
-            </div>
-
+            @if (Route::has('admin.mahasantri.create'))
+                <a href="{{ route('admin.mahasantri.create') }}" class="btn-add">+ Tambah Mahasantri</a>
+            @endif
         </div>
-
-
-        {{-- KOLOM KANAN --}}
 
         <div class="card">
-
-            <h2>
-                Kegiatan Hari Ini
-            </h2>
-
-
-            @if($sesiAktif->count() > 0)
-
-
-                @foreach($sesiAktif as $sesi)
-
-                    <div class="session">
-
-                        <h3>
-
-                            {{ $sesi->kegiatan->nama_kegiatan ?? 'Kegiatan' }}
-
-                        </h3>
-
-
-                        <p>
-
-                            📅
-
-                            {{ $sesi->tanggal->format('d-m-Y') }}
-
-                        </p>
-
-
-                        <p>
-
-                            🕐
-
-                            {{ $sesi->jam_mulai }}
-
-                            -
-
-                            {{ $sesi->jam_selesai }}
-
-                        </p>
-
-
-                        <span class="badge">
-
-                            ● PRESENSI AKTIF
-
-                        </span>
-
-                    </div>
-
-                @endforeach
-
-
+            @if (count($listMahasantri) > 0)
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIM</th>
+                            <th>Email</th>
+                            <th>QR Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($listMahasantri as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->user->name ?? ($item->nama ?? ($item->name ?? '-')) }}</td>
+                                <td>{{ $item->nim ?? '-' }}</td>
+                                <td>{{ $item->user->email ?? ($item->email ?? '-') }}</td>
+                                <td>
+                                    <span class="badge">{{ $item->qr_code ?? '-' }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @else
-
-
                 <div class="empty">
-
-                    <h3>
-                        Belum Ada Sesi Presensi
-                    </h3>
-
-                    <p>
-
-                        Belum ada kegiatan
-                        yang membuka presensi hari ini.
-
-                    </p>
-
+                    <h3>Belum Ada Data Mahasantri</h3>
+                    <p>Data mahasantri belum tersedia di dalam sistem.</p>
                 </div>
-
-
             @endif
-
         </div>
-
-
     </div>
-
-</div>
-
 </body>
 
 </html>

@@ -133,7 +133,7 @@
                             letter-spacing: -0.5px;
                         ">
                             Selamat Datang,
-                            {{ auth()->user()->name }} 👋
+                            {{ auth()->user()->name }}
                         </h1>
 
 
@@ -266,7 +266,7 @@
                                 font-size: 11px;
                                 font-weight: 700;
                             ">
-                                ● Aktif
+                                Aktif
                             </span>
 
                         </div>
@@ -356,9 +356,11 @@
                             justify-content: center;
                             border-radius: 12px;
                             background: #eff6ff;
-                            font-size: 22px;
+                            color: #2563eb;
+                            font-size: 14px;
+                            font-weight: 800;
                         ">
-                            👥
+                            USR
                         </div>
 
                         <span style="
@@ -443,9 +445,11 @@
                             justify-content: center;
                             border-radius: 12px;
                             background: #ecfdf5;
-                            font-size: 22px;
+                            color: #16a34a;
+                            font-size: 14px;
+                            font-weight: 800;
                         ">
-                            🎓
+                            MHS
                         </div>
 
                         <span style="
@@ -530,9 +534,11 @@
                             justify-content: center;
                             border-radius: 12px;
                             background: #fff7ed;
-                            font-size: 22px;
+                            color: #ea580c;
+                            font-size: 14px;
+                            font-weight: 800;
                         ">
-                            📚
+                            KGT
                         </div>
 
                         <span style="

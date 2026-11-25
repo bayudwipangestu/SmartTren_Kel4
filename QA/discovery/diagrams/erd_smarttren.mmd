@@ -1,0 +1,56 @@
+erDiagram
+    USERS ||--o| MAHASANTRI : "hasOne (user_id)"
+    USERS ||--o{ SURAT_IZINS : "hasMany (user_id)"
+    KEGIATAN ||--o{ SESI_PRESENSI : "hasMany (kegiatan_id)"
+    SESI_PRESENSI ||--o{ PRESENSI : "hasMany (sesi_presensi_id)"
+    MAHASANTRI ||--o{ PRESENSI : "hasMany (mahasantri_id)"
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        enum role "admin, pengurus, mahasantri"
+        string password
+    }
+    MAHASANTRI {
+        bigint id PK
+        bigint user_id FK
+        string nim UK
+        string nama
+        enum jenis_kelamin "L, P"
+        string kamar
+        string no_hp
+        string qr_code UK
+        enum status "aktif, nonaktif"
+    }
+    KEGIATAN {
+        bigint id PK
+        string nama_kegiatan
+        text deskripsi
+        enum status "aktif, nonaktif"
+    }
+    SESI_PRESENSI {
+        bigint id PK
+        bigint kegiatan_id FK
+        date tanggal
+        time jam_mulai
+        time jam_selesai
+        enum status "aktif, selesai, dibatalkan"
+    }
+    PRESENSI {
+        bigint id PK
+        bigint sesi_presensi_id FK
+        bigint mahasantri_id FK
+        enum status "hadir, izin, sakit, alpa"
+        text keterangan
+        datetime waktu_presensi
+    }
+    SURAT_IZINS {
+        bigint id PK
+        bigint user_id FK
+        enum jenis_izin "Sakit, Izin"
+        date tanggal
+        text keterangan
+        string bukti_foto
+        enum status "pending, disetujui, ditolak"
+    }

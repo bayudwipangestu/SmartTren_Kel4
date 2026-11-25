@@ -3,77 +3,116 @@
 namespace App\Http\Controllers\Mahasantri;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mahasantri;
-use App\Models\SesiPresensi;
+use Illuminate\Http\Request;
+use App\Models\Presensi;
+use App\Models\SuratIzin;
+use App\Models\Kegiatan;
 use Illuminate\Support\Facades\Auth;
 
 class PresensiController extends Controller
 {
-    /**
-     * Menampilkan halaman presensi Mahasantri.
-     */
+    // Halaman Tampil QR Code Presensi Mahasantri
     public function index()
     {
         $user = Auth::user();
-
-        if (!$user) {
-            abort(403, 'Anda harus login terlebih dahulu.');
-        }
-
-        $mahasantri = Mahasantri::with('user')
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (!$mahasantri) {
-            abort(
-                404,
-                'Data Mahasantri belum terhubung dengan akun pengguna ini.'
-            );
-        }
-
-        $sesiAktif = SesiPresensi::with('kegiatan')
-            ->where('status', 'aktif')
-            ->whereDate(
-                'tanggal',
-                now()->toDateString()
-            )
-            ->orderBy('jam_mulai', 'asc')
-            ->get();
-
-        return view(
-            'mahasantri.presensi.index',
-            compact(
-                'mahasantri',
-                'sesiAktif'
-            )
-        );
+        return view('mahasantri.presensi.index', compact('user'));
     }
+
+    // Halaman Riwayat Presensi
     public function riwayat()
-{
-    $user = Auth::user();
+    {
+        $mahasantriId = Auth::user()->mahasantri?->id;
 
-    if (!$user) {
-        abort(403, 'Anda harus login terlebih dahulu.');
+        $riwayat = $mahasantriId
+            ? Presensi::with('sesiPresensi.kegiatan')
+                ->where('mahasantri_id', $mahasantriId)
+                ->orderBy('created_at', 'desc')
+                ->get()
+            : collect();
+
+        return view('mahasantri.presensi.riwayat', compact('riwayat'));
     }
 
-    $mahasantri = Mahasantri::where(
-        'user_id',
-        $user->id
-    )->firstOrFail();
+    // Halaman Rekap Kehadiran (Dengan Filter & Integrasi Surat Izin Real-Time)
+    public function rekap(Request $request)
+    {
+        $userId = Auth::id();
+        $mahasantriId = Auth::user()->mahasantri?->id;
+        $kegiatans = Kegiatan::all();
 
-    $presensi = \App\Models\Presensi::with([
-        'sesiPresensi.kegiatan'
-    ])
-        ->where('mahasantri_id', $mahasantri->id)
-        ->orderByDesc('waktu_presensi')
-        ->get();
+        // 1. Ambil data presensi fisik
+        $queryPresensi = $mahasantriId
+            ? Presensi::with('sesiPresensi.kegiatan')->where('mahasantri_id', $mahasantriId)
+            : Presensi::with('sesiPresensi.kegiatan')->whereRaw('1 = 0');
 
-    return view(
-        'mahasantri.presensi.riwayat',
-        compact(
-            'mahasantri',
-            'presensi'
-        )
-    );
-}
+        if ($request->filled('kegiatan_id')) {
+            $queryPresensi->whereHas('sesiPresensi', function ($q) use ($request) {
+                $q->where('kegiatan_id', $request->kegiatan_id);
+            });
+        }
+
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $queryPresensi->whereBetween('created_at', [
+                $request->tanggal_mulai . ' 00:00:00', 
+                $request->tanggal_selesai . ' 23:59:59'
+            ]);
+        }
+
+        if ($request->filled('status')) {
+            $queryPresensi->whereRaw('LOWER(status) = ?', [strtolower($request->status)]);
+        }
+
+        $listPresensi = $queryPresensi->get();
+
+        // 2. Ambil data surat izin (Sakit / Izin) secara real-time
+        $queryIzin = SuratIzin::where('user_id', $userId);
+
+        if ($request->filled('tanggal_mulai') && $request->filled('tanggal_selesai')) {
+            $queryIzin->whereBetween('tanggal', [
+                $request->tanggal_mulai, 
+                $request->tanggal_selesai
+            ]);
+        }
+
+        if ($request->filled('status')) {
+            $queryIzin->whereRaw('LOWER(jenis_izin) = ?', [strtolower($request->status)]);
+        }
+
+        $listIzin = $queryIzin->get();
+
+        // 3. Gabungkan koleksi data untuk ditampilkan di tabel
+        $riwayatGabungan = collect();
+
+        foreach ($listPresensi as $p) {
+            $riwayatGabungan->push((object)[
+                'tanggal' => $p->created_at,
+                'kegiatan' => $p->sesiPresensi->kegiatan->nama_kegiatan ?? '-',
+                'status' => $p->status
+            ]);
+        }
+
+        foreach ($listIzin as $i) {
+            // Cek apakah jenis izin sesuai filter status (jika ada filter status)
+            if (!$request->filled('status') || strtolower($request->status) == strtolower($i->jenis_izin)) {
+                $riwayatGabungan->push((object)[
+                    'tanggal' => \Carbon\Carbon::parse($i->tanggal),
+                    'kegiatan' => 'Pengajuan Surat ' . $i->jenis_izin,
+                    'status' => $i->jenis_izin
+                ]);
+            }
+        }
+
+        // Urutkan berdasarkan tanggal terbaru
+        $riwayat = $riwayatGabungan->sortByDesc('tanggal');
+
+        // 4. Hitung total rekap (Hadir, Sakit, Izin, Alpa) secara akurat dari gabungan data
+        $dataRekap = [
+            'Hadir' => $riwayat->filter(fn ($item) => strtolower((string) $item->status) === 'hadir')->count(),
+            'Izin'  => $riwayat->filter(fn ($item) => strtolower((string) $item->status) === 'izin')->count(),
+            'Sakit' => $riwayat->filter(fn ($item) => strtolower((string) $item->status) === 'sakit')->count(),
+            'Alpa'  => $riwayat->filter(fn ($item) => strtolower((string) $item->status) === 'alpa')->count(),
+        ];
+
+        return view('mahasantri.presensi.rekap', compact('riwayat', 'kegiatans', 'dataRekap'));
+    }
 }

@@ -43,15 +43,15 @@
                                 <tr class="hover:bg-gray-50">
 
                                     <td class="px-6 py-4">
-                                        {{ $sesi->firstItem() + $loop->index }}
+                                        {{ method_exists($sesi, 'firstItem') ? $sesi->firstItem() + $loop->index : $loop->iteration }}
                                     </td>
 
                                     <td class="px-6 py-4 font-semibold">
-                                        {{ $item->kegiatan->nama_kegiatan }}
+                                        {{ $item->kegiatan->nama_kegiatan ?? '-' }}
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        {{ $item->tanggal->format('d-m-Y') }}
+                                        {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') : '-' }}
                                     </td>
 
                                     <td class="px-6 py-4">
@@ -143,9 +143,11 @@
                     </table>
                 </div>
 
-                <div class="border-t px-6 py-4">
-                    {{ $sesi->links() }}
-                </div>
+                @if(method_exists($sesi, 'links'))
+                    <div class="border-t px-6 py-4">
+                        {{ $sesi->links() }}
+                    </div>
+                @endif
 
             </div>
 
